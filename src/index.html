@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link rel="icon" type="image" href="/img/Spoint-logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <title>skitlab</title>
+  </head>
+  <style type="text/css" media="screen">
+    html {
+      touch-action: pan-y;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    body {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      margin: 0;
+      overscroll-behavior: none;
+    }
+
+    /* Landign page */
+    section.landing-page {
+      width: 100%;
+      font-family: "Bebas Neue", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      z-index: 1;
+      position: relative;
+      overflow-y: scroll;
+      color: #4a4747;
+      .contact-me-block {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 10px;
+        .contact-us {
+          position: relative;
+          cursor: pointer;
+          font-size: 20px;
+        }
+        .icons {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          margin-left: 10px;
+          .linkeidin-svg {
+            cursor: pointer;
+            position: relative;
+          }
+          .github-svg {
+            cursor: pointer;
+            position: relative;
+          }
+        }
+      }
+    }
+
+    /* Application */
+    section.app {
+      position: fixed;
+      top: 0;
+      left: 0;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      touch-action: auto;
+      canvas {
+        position: fixed;
+        overflow: hidden;
+        display: block;
+      }
+    }
+  </style>
+  <body>
+    <section class="landing-page">
+      <div data-scroll-container>
+        <div class="contact-me-block">
+          <div class="contact-me">contact us:</div>
+          <div class="icons">
+            <div class="linkeidin-svg">
+              <img
+                src="img/linkiedin.svg"
+                alt="linkeidin-svg"
+                width="30"
+                height="30"
+                onclick="window.open('https://www.linkedin.com/in/slavakittel/', '_blank')"
+              />
+            </div>
+            <div class="github-svg">
+              <img
+                src="img/github.svg"
+                alt="github-svg"
+                width="30"
+                height="30"
+                onclick="window.open('https://github.com/SlavaKittel', '_blank')"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="app">
+      <div id="app" />
+    </section>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
