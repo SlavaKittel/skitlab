@@ -1,19 +1,23 @@
-uniform vec3 color;
-uniform vec3 uLightDirection;
-uniform vec3 uAmbientLightColor;
-uniform vec3 uMetalness;
+uniform sampler2D uTexture;
+uniform float progress;
 
-varying vec3 vNormal;
+varying vec2 vUv;
+varying float vFrontShadow;
+
+float pi = 3.14159265359;
 
 void main() {
-  vec3 norm = normalize(vNormal);
-  float nDotL = clamp(dot(uLightDirection, norm), 0.0, 1.0);
+  // Create a 2D rotation matrix
+  float cosAngle = cos(-pi/2.);
+  float sinAngle = sin(-pi/2.);
+  mat2 rotationMatrix = mat2(
+    cosAngle, -sinAngle,
+    sinAngle, cosAngle
+  );
+  // Rotate the UV coordinates
+  vec2 rotatedUV = rotationMatrix * (vUv - 0.5) + 0.5;
 
-  // Specular light component
-  vec3 halfDir = normalize(vec3(0.0, 0.0, 1.0)); // Simplified half-vector
-  float spec = pow(max(dot(vNormal, halfDir), 0.0), 16.0);
-  vec3 specular = spec * mix(vec3(1.0), vec3(1.0, 1.0, 1.0), 0.);
+  gl_FragColor = texture2D(uTexture, rotatedUV);
 
-  vec3 diffuseColor = nDotL * color;
-  gl_FragColor = vec4(diffuseColor * 1. + uAmbientLightColor * 0.2 + specular, 1.);
+  gl_FragColor.rgb *=vFrontShadow;
 }
