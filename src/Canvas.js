@@ -1,5 +1,6 @@
 import * as THREE from "three";
-import { createImageComponent, updateImageUniforms } from "./Images"; 
+import { createImageComponent, updateImageUniforms } from "./Images";
+import { background, updateBackground } from "./Background";
 
 // TODO delete OrbitControls
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -30,16 +31,8 @@ scene.background = new THREE.Color(0x87ceeb);
 
 // Texture Loader
 const textureLoader = new THREE.TextureLoader();
-const images = [
-  "/img/test1.jpg",
-  "/img/test1.jpg",
-  "/img/test1.jpg",
-  "/img/test1.jpg",
-  "/img/test1.jpg",
-  "/img/test1.jpg",
-];
+const images = ["/img/test1.jpg", "/img/test2.webp", "/img/test3.jpg"];
 const textureImages = images.map((src) => textureLoader.load(src));
-
 
 // Mesh Image Geometry
 const imageMeshes = textureImages.map((texture) => {
@@ -47,6 +40,9 @@ const imageMeshes = textureImages.map((texture) => {
   scene.add(imageMesh);
   return imageMesh;
 });
+
+// Background
+background(scene);
 
 // Resize
 window.addEventListener("resize", () => {
@@ -70,18 +66,29 @@ window.onload = () => {
 function update() {
   // Update uniforms and apply transformations for each image in one loop
   imageMeshes.forEach((imageMesh, index) => {
-    const yScrollForEach = yScrollPosition - index * 1.3;
+    const yScrollForEach = () => {
+      const range = 3.76;
+      const sizeBetweenfactor = 1.25;
+      const sizeBetweenImages = index * sizeBetweenfactor;
+      const loopRange =
+        ((((yScrollPosition - sizeBetweenImages) % range) + range) % range) -
+        range / 2;
+      return loopRange;
+    };
     // Update the shader uniforms
-    updateImageUniforms(imageMesh, yScrollForEach);
+    updateImageUniforms(imageMesh, yScrollForEach());
 
     // Update rotation and position based on scroll
     imageMesh.position.z =
       -(
-        Math.PI - Math.sqrt(Math.pow(yScrollForEach, 2) + Math.pow(Math.PI, 2))
+        Math.PI -
+        Math.sqrt(Math.pow(yScrollForEach(), 2) + Math.pow(Math.PI, 2))
       ) * 2;
     imageMesh.rotation.z = Math.PI / 2;
-    imageMesh.rotation.y = -yScrollForEach / 1.9;
+    imageMesh.rotation.y = -yScrollForEach() / 1.9;
   });
+
+  updateBackground(yScrollPosition);
 
   // Update
   requestAnimationFrame(update);

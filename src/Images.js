@@ -21,7 +21,6 @@ export function createImageComponent(texture) {
   });
 
   const mesh = new THREE.Mesh(planeGeometry, planeMaterial);
-  // mesh.position.set(position.x, position.y, position.z);
 
   return mesh;
 }
