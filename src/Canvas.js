@@ -1,22 +1,26 @@
 import * as THREE from "three";
-import { createImageComponent, updateImageUniforms } from "./Images";
-import { background, updateBackground } from "./Background";
+import { getImages, updateImages } from "./Images";
+import { getBackground, updateBackground } from "./Background";
 
 // TODO delete OrbitControls
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import VirtualScroll from "virtual-scroll";
 
-// Virtual Scroll
-let yScrollPosition = 0;
-const scroller = new VirtualScroll();
-scroller.on((e) => {
-  yScrollPosition = e.y / 1000;
-});
-
 // Variables
 const width = window.innerWidth;
 const height = window.innerHeight;
+
+// Virtual Scroll
+let yStartPosition = 0.563;
+let yScrollPosition = yStartPosition;
+const scroller = new VirtualScroll();
+scroller.on((e) => {
+  yScrollPosition = e.y / 1000 + yStartPosition;
+});
+
+// Clock
+const clock = new THREE.Clock();
 
 // Scene and Camera
 const scene = new THREE.Scene();
@@ -29,20 +33,23 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.z = 2;
 scene.background = new THREE.Color(0x87ceeb);
 
-// Texture Loader
-const textureLoader = new THREE.TextureLoader();
-const images = ["/img/test1.jpg", "/img/test2.webp", "/img/test3.jpg"];
-const textureImages = images.map((src) => textureLoader.load(src));
+// Lights
+// const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+// scene.add(ambientLight);
+const directLight = new THREE.DirectionalLight(0xffffff, 4);
+directLight.position.set(0, -5, 5);
+scene.add(directLight);
+const directLight2 = new THREE.DirectionalLight(0xffffff, 1);
+directLight2.position.set(0, 5, 0);
+scene.add(directLight2);
+const lightHelper = new THREE.PointLightHelper(directLight2, 0.5);
+scene.add(lightHelper);
 
-// Mesh Image Geometry
-const imageMeshes = textureImages.map((texture) => {
-  const imageMesh = createImageComponent(texture);
-  scene.add(imageMesh);
-  return imageMesh;
-});
+// Images 
+getImages(scene);
 
 // Background
-background(scene);
+getBackground(scene);
 
 // Resize
 window.addEventListener("resize", () => {
@@ -63,34 +70,17 @@ window.onload = () => {
 
 // TODO FOR TEST Orbit Controls
 // const controls = new OrbitControls(camera, renderer.domElement);
+
 function update() {
-  // Update uniforms and apply transformations for each image in one loop
-  imageMeshes.forEach((imageMesh, index) => {
-    const yScrollForEach = () => {
-      const range = 3.76;
-      const sizeBetweenfactor = 1.25;
-      const sizeBetweenImages = index * sizeBetweenfactor;
-      const loopRange =
-        ((((yScrollPosition - sizeBetweenImages) % range) + range) % range) -
-        range / 2;
-      return loopRange;
-    };
-    // Update the shader uniforms
-    updateImageUniforms(imageMesh, yScrollForEach());
+  const deltaTime = clock.getDelta();
 
-    // Update rotation and position based on scroll
-    imageMesh.position.z =
-      -(
-        Math.PI -
-        Math.sqrt(Math.pow(yScrollForEach(), 2) + Math.pow(Math.PI, 2))
-      ) * 2;
-    imageMesh.rotation.z = Math.PI / 2;
-    imageMesh.rotation.y = -yScrollForEach() / 1.9;
-  });
+  // Update Images
+  updateImages(yScrollPosition);
 
-  updateBackground(yScrollPosition);
+  // Update Background
+  updateBackground(yScrollPosition, deltaTime);
 
-  // Update
+  // Update Canvas
   requestAnimationFrame(update);
   // Render
   renderer.render(scene, camera);
