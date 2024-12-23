@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { getImages, updateImages } from "./Images";
-import { getBackground, updateBackground } from "./Background";
+import { getImages, updateImages } from "./components/Images";
+import { getBackground, updateBackground } from "./components/Background";
 
 // TODO delete OrbitControls
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";

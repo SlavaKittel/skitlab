@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import vertexShader from "./shaders/vertex.glsl?raw";
-import fragmentShader from "./shaders/fragment.glsl?raw";
+import vertexShader from "./../shaders/vertex.glsl?raw";
+import fragmentShader from "./../shaders/fragment.glsl?raw";
 
 // Texture Loader
 const textureLoader = new THREE.TextureLoader();
