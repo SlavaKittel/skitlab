@@ -93,23 +93,28 @@ const material = new THREE.MeshStandardMaterial({
   displacementScale: 0.1,
   side: THREE.DoubleSide,
 });
-const mesh = new THREE.Mesh(geometry, material);
-mesh.rotation.order = "XZY";
-mesh.rotation.z = THREE.MathUtils.degToRad(-5);
-mesh.position.z = 27;
+const meshCylinder = new THREE.Mesh(geometry, material);
+meshCylinder.rotation.order = "XZY";
+meshCylinder.rotation.z = THREE.MathUtils.degToRad(-5);
+meshCylinder.position.z = 27;
 
 export function getBackground(scene) {
   // Cylinder background
-  scene.add(mesh);
+  scene.add(meshCylinder);
   // Cubes
   scene.add(cubeGroup);
 }
 
-export function updateBackground(yScrollPosition, deltaTime) {
+export function updateBackground(yScrollPosition, pointerCoords, deltaTime) {
   const factorRotation = 0.01;
-  mesh.rotation.y = -yScrollPosition * factorRotation;
+  meshCylinder.rotation.y = -yScrollPosition * factorRotation;
+  meshCylinder.position.x = -pointerCoords.x * 0.02;
+  meshCylinder.position.y = -pointerCoords.y * 0.02;
+
   // Update Cubes
   cubeGroup.rotation.y = -yScrollPosition * 0.5;
+  cubeGroup.position.x = -pointerCoords.x * 0.1;
+  cubeGroup.position.y = -pointerCoords.y * 0.1;
 
   meshCubeArray.forEach((meshCube, index) => {
     meshCube.rotation.y += rotationSpeeds[index] * deltaTime * 10;

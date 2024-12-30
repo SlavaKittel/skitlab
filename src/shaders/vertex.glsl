@@ -2,6 +2,7 @@
 uniform float uYScrollPosition;
 uniform float uAngle;
 uniform float uProgress;
+uniform vec3 uMousePos;
 
 varying vec2 vUv;
 varying float vFrontShadow;
@@ -44,7 +45,7 @@ void main() {
 
   newposition.z =  rad + rad*(1. - offs/2.)*sin(-offs*rolls*pi - 0.5*pi);
   newposition.x =  - 0.5 + rad*(1. - offs/2.)*cos(-offs*rolls*pi + 0.5*pi);
-  // // rot back
+  // rot back
   newposition = rotate(newposition - vec3(-.5,.5,0.), vec3(0.,0.,1.),uAngle) + vec3(-.5,.5,0.);
   // unroll
   newposition = rotate(newposition - vec3(-.5,0.5,rad), vec3(sin(uAngle),cos(uAngle),0.), -pi*uProgress*rolls);
@@ -54,13 +55,17 @@ void main() {
     rad*(1.-uProgress/2.)
   );
 
-
   vec3 finalposition = mix(newposition,position,tProgress);
   vec4 modelPosition = modelMatrix * vec4(finalposition, 1.0);
-  
-  // Move to X and Y axis
-  modelPosition.x += uYScrollPosition;
-  modelPosition.y += -pow(2.0, uYScrollPosition * 5. - 14.) * 300.;
+
+  // Bell shaper
+  float k = 6.5;
+  float sizaBell = 0.25;
+  float correctionValue = 0.1;
+  modelPosition.z += 
+  (1. / (1. + exp(-k * ((finalposition.x - uMousePos.y ) - 0.))) - 1. / (1. + exp(-k * ((finalposition.x - uMousePos.y) - sizaBell))))
+  *
+  (1. / (1. + exp(-k * ((finalposition.y + uMousePos.x + correctionValue) - 0.))) - 1. / (1. + exp(-k * ((finalposition.y + uMousePos.x + correctionValue) - sizaBell))));
 
   // Calculate the final vertex position in clip space
   gl_Position = projectionMatrix * viewMatrix * modelPosition;

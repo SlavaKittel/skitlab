@@ -11,6 +11,16 @@ import VirtualScroll from "virtual-scroll";
 const width = window.innerWidth;
 const height = window.innerHeight;
 
+// Pointer
+const pointerCoords = new THREE.Vector2();
+function onPointerMove(event) {
+  pointerCoords.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointerCoords.y = -(event.clientY / window.innerHeight) * 2 + 1;
+}
+window.addEventListener("pointermove", (event) => {
+  onPointerMove(event);
+});
+
 // Virtual Scroll
 let yStartPosition = 0.563;
 let yScrollPosition = yStartPosition;
@@ -45,12 +55,6 @@ scene.add(directLight2);
 const lightHelper = new THREE.PointLightHelper(directLight2, 0.5);
 scene.add(lightHelper);
 
-// Images 
-getImages(scene);
-
-// Background
-getBackground(scene);
-
 // Resize
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -68,6 +72,12 @@ window.onload = () => {
   document.getElementById("app")?.appendChild(renderer.domElement);
 };
 
+// Images 
+getImages(scene, camera, renderer);
+
+// Background
+getBackground(scene);
+
 // TODO FOR TEST Orbit Controls
 // const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -75,10 +85,10 @@ function update() {
   const deltaTime = clock.getDelta();
 
   // Update Images
-  updateImages(yScrollPosition);
+  updateImages(yScrollPosition, pointerCoords);
 
   // Update Background
-  updateBackground(yScrollPosition, deltaTime);
+  updateBackground(yScrollPosition, pointerCoords, deltaTime);
 
   // Update Canvas
   requestAnimationFrame(update);
