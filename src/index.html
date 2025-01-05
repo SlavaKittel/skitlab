@@ -8,23 +8,14 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
     <link rel="icon" type="image" href="/img/Spoint-logo.png" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist+Mono:wght@100..900&family=Teko:wght@300..700&display=swap" rel="stylesheet">
     <title>skitlab</title>
   </head>
   <style type="text/css" media="screen">
-    html {
-      touch-action: pan-y;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-    body {
+    html, body {
+      cursor: none;
       -webkit-touch-callout: none;
       -webkit-user-select: none;
       -khtml-user-select: none;
@@ -38,6 +29,8 @@
     /* Landign page */
     section.landing-page {
       width: 100%;
+      /* TODO delete for mobile */
+      height: 100vh;
       font-family: "Bebas Neue", sans-serif;
       font-weight: 400;
       font-style: normal;
@@ -50,6 +43,27 @@
         justify-content: flex-start;
         align-items: center;
         margin: 10px 0 0 10px;
+      }
+      .mouse-ball {
+        font-family: "Bebas Neue", serif;
+        font-weight: 400;
+        color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #000000;
+        z-index: 99;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -50%);
+        /* TODO add mode? */
+        /* mix-blend-mode: difference; */
+        transition: width 0.3s ease-in-out, height 0.3s ease-in-out, background 0.3s ease-in-out, color 0.3s ease-in-out;
       }
     }
 
@@ -74,10 +88,9 @@
   </style>
   <body>
     <section class="landing-page">
-      <div data-scroll-container>
-        <div class="logo">
-          <img src="img/skit-logo.svg" alt="skit-logo" width="80"/>
-        </div>
+      <div class="mouse-ball">Explore</div>
+      <div class="logo">
+        <img src="img/skit-logo.svg" alt="skit-logo" width="80" />
       </div>
     </section>
 

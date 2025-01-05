@@ -8,6 +8,7 @@ let newPlanesMesh = [];
 let scene;
 let camera;
 let renderer;
+let mouseBall;
 let indexOfImage = 0;
 let pointerCoords = new THREE.Vector2();
 
@@ -46,6 +47,7 @@ const raycaster = new THREE.Raycaster();
 function renderIntersects() {
   if (!planeGroup) return;
   raycaster.setFromCamera(pointerCoords, camera);
+  const intersectsImages = raycaster.intersectObjects(newImagesMesh);
   const intersects = raycaster.intersectObjects([planeGroup]);
   let pickObject;
   if (intersects.length) {
@@ -59,13 +61,28 @@ function renderIntersects() {
     pickObject = intersects[0].object;
     indexOfImage = pickObject.userData.index;
   }
+  // TODO add links
+  if (intersectsImages.length) {
+    mouseBall.style.width = "50px";
+    mouseBall.style.height = "50px";
+    mouseBall.style.background = "#E3E8F2";
+    mouseBall.style.color = "#ff004d";
+    // console.log(pickObject.userData.index)
+  } else if (!intersectsImages.length) {
+    mouseBall.style.width = "20px";
+    mouseBall.style.height = "20px";
+    mouseBall.style.background = "#000000";
+    mouseBall.style.color = "transparent";
+    // console.log('No Intersects')
+  }
   renderer.render(scene, camera);
 }
 
-export function getImages(_scene, _camera, _renderer) {
+export function getImages(_scene, _camera, _renderer, _mouseBall) {
   scene = _scene;
   camera = _camera;
   renderer = _renderer;
+  mouseBall = _mouseBall;
 
   // need for logic
   scene.add(planeGroup);
@@ -104,7 +121,7 @@ export function updateImages(yScrollPosition, _pointerCoords) {
     const sizeBetweenfactor = 1.25;
     const sizeBetweenImages = index * sizeBetweenfactor;
     const loopRange =
-      ((((yScrollPosition - sizeBetweenImages) % range) + range) % range) -
+      ((((-yScrollPosition - sizeBetweenImages) % range) + range) % range) -
       range / 2;
     return loopRange;
   };

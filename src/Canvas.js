@@ -1,32 +1,46 @@
 import * as THREE from "three";
 import { getImages, updateImages } from "./components/Images";
 import { getBackground, updateBackground } from "./components/Background";
+import { easeOutCirc } from "./utils/helped";
 
 // TODO delete OrbitControls
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
-import VirtualScroll from "virtual-scroll";
 
 // Variables
 const width = window.innerWidth;
 const height = window.innerHeight;
 
-// Pointer
 const pointerCoords = new THREE.Vector2();
-function onPointerMove(event) {
-  pointerCoords.x = (event.clientX / window.innerWidth) * 2 - 1;
-  pointerCoords.y = -(event.clientY / window.innerHeight) * 2 + 1;
-}
+const mouseBall = document.querySelector(".mouse-ball");
+let mouseX = 0;
+let mouseY = 0;
+let ballX = 0;
+let ballY = 0;
+let speed = 0.09;
+const easeCoeff = 0.001;
+
+// Pointermove listener
 window.addEventListener("pointermove", (event) => {
-  onPointerMove(event);
+  mouseX = event.clientX;
+  mouseY = event.clientY;
 });
 
-// Virtual Scroll
-let yStartPosition = 0.563;
-let yScrollPosition = yStartPosition;
-const scroller = new VirtualScroll();
-scroller.on((e) => {
-  yScrollPosition = e.y / 1000 + yStartPosition;
+// Scroll Y wheel and touch
+let wheelScrollY = 0;
+let currentScrollY = 0;
+window.addEventListener("wheel", (event) => {
+  const delta = Math.sign(event.deltaY) * Math.min(Math.abs(event.deltaY), 1000);
+  wheelScrollY += delta * 0.001;
+});
+let toushScrollY = 0;
+window.addEventListener("touchstart", (event) => {
+  toushScrollY = event.touches[0].clientY;
+});
+window.addEventListener("touchmove", (event) => {
+  const touchCurrentY = event.touches[0].clientY;
+  const touchDelta = touchCurrentY - toushScrollY;
+  wheelScrollY -= touchDelta * 0.005;
+  toushScrollY = touchCurrentY; // Update for continuous tracking
 });
 
 // Clock
@@ -72,8 +86,8 @@ window.onload = () => {
   document.getElementById("app")?.appendChild(renderer.domElement);
 };
 
-// Images 
-getImages(scene, camera, renderer);
+// Images
+getImages(scene, camera, renderer, mouseBall);
 
 // Background
 getBackground(scene);
@@ -84,11 +98,24 @@ getBackground(scene);
 function update() {
   const deltaTime = clock.getDelta();
 
+  // Update Scroll
+  currentScrollY += (wheelScrollY - currentScrollY) * easeOutCirc(easeCoeff);
+
+  // Update Pointer and MouseBall
+  let distX = mouseX - ballX;
+  let distY = mouseY - ballY;
+  ballX = ballX + distX * speed;
+  ballY = ballY + distY * speed;
+  pointerCoords.x = (ballX / window.innerWidth) * 2 - 1;
+  pointerCoords.y = -(ballY / window.innerHeight) * 2 + 1;
+  mouseBall.style.left = ballX + "px";
+  mouseBall.style.top = ballY + "px";
+
   // Update Images
-  updateImages(yScrollPosition, pointerCoords);
+  updateImages(currentScrollY, pointerCoords);
 
   // Update Background
-  updateBackground(yScrollPosition, pointerCoords, deltaTime);
+  updateBackground(currentScrollY, pointerCoords, deltaTime);
 
   // Update Canvas
   requestAnimationFrame(update);

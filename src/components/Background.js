@@ -107,12 +107,12 @@ export function getBackground(scene) {
 
 export function updateBackground(yScrollPosition, pointerCoords, deltaTime) {
   const factorRotation = 0.01;
-  meshCylinder.rotation.y = -yScrollPosition * factorRotation;
+  meshCylinder.rotation.y = yScrollPosition * factorRotation;
   meshCylinder.position.x = -pointerCoords.x * 0.02;
   meshCylinder.position.y = -pointerCoords.y * 0.02;
 
   // Update Cubes
-  cubeGroup.rotation.y = -yScrollPosition * 0.5;
+  cubeGroup.rotation.y = yScrollPosition * 0.5;
   cubeGroup.position.x = -pointerCoords.x * 0.1;
   cubeGroup.position.y = -pointerCoords.y * 0.1;
 
