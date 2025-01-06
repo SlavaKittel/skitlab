@@ -1,52 +1,40 @@
 import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 // <<<< CUBES >>>>
-const geometryCubes = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-const materialCubes = new THREE.MeshStandardMaterial({
-  color: 0xff0000,
-  metalness: 0.7,
-  roughness: 0.9,
-});
-let newCubes = [];
-let meshCubeArray = [];
+const loader = new GLTFLoader();
+let logoModelArray = [];
 let rotationSpeeds = [];
+const logoModelGroup = new THREE.Group();
 
-let count = 20;
-for (let i = 0; i < count; i += 1) {
-  const angle = Math.random() * Math.PI * 2;
-  const radius = 8;
-  newCubes.push({
-    key: "instance_" + Math.random(),
-    position: [
+loader.load("/glb-models/main-logo3.glb", (gltf) => {
+  const logoModel = gltf.scene;
+  logoModel.scale.set(0.15, 0.15, 0.15);
+
+  let count = 40;
+  for (let i = 0; i < count; i += 1) {
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 8;
+
+    const logoModelClone = logoModel.clone();
+    logoModelClone.position.set(
       (0.5 - Math.random()) * 1,
-      0.5 - Math.random() * 2,
-      (0.5 - Math.random()) * 1,
-    ],
-    x: radius * Math.cos(angle),
-    y: radius * Math.sin(angle),
-    rotation: [Math.random() * 0.1, 0.5 - Math.random(), 0.5 - Math.random()],
-  });
-}
+      0.5 - Math.random() * 3 + 1,
+      (0.5 - Math.random()) * 1
+    );
+    logoModelClone.position.x = radius * Math.cos(angle);
+    logoModelClone.position.z = radius * Math.sin(angle);
 
-const cubeGroup = new THREE.Group();
-newCubes.forEach((cube) => {
-  const randomSpeed = Math.random() * 0.01 + 0.01;
-  const direction = Math.random() > 0.5 ? 1 : -1;
-  const meshCube = new THREE.Mesh(geometryCubes, materialCubes);
+    // Add random rotation speed
+    const randomSpeed = Math.random() * 0.01 + 0.01;
+    const direction = Math.random() > 0.5 ? 1 : -1;
+    rotationSpeeds.push(randomSpeed * direction);
 
-  // Set position and rotation
-  meshCube.position.set(...cube.position);
-  meshCube.rotation.set(...cube.rotation);
-  meshCube.translateX(cube.x);
-  meshCube.translateZ(cube.y);
-
-  // Random rotation speed
-  rotationSpeeds.push(randomSpeed * direction);
-
-  meshCubeArray.push(meshCube);
-  cubeGroup.add(meshCube);
+    logoModelArray.push(logoModelClone);
+    logoModelGroup.add(logoModelClone);
+  }
+  logoModelGroup.position.z = 6;
 });
-cubeGroup.position.z = 6;
 
 // <<<< CYLINDER BACKGROUND >>>>
 // Texture Cylinbder Loader
@@ -102,7 +90,7 @@ export function getBackground(scene) {
   // Cylinder background
   scene.add(meshCylinder);
   // Cubes
-  scene.add(cubeGroup);
+  scene.add(logoModelGroup);
 }
 
 export function updateBackground(yScrollPosition, pointerCoords, deltaTime) {
@@ -112,13 +100,13 @@ export function updateBackground(yScrollPosition, pointerCoords, deltaTime) {
   meshCylinder.position.y = -pointerCoords.y * 0.02;
 
   // Update Cubes
-  cubeGroup.rotation.y = yScrollPosition * 0.5;
-  cubeGroup.position.x = -pointerCoords.x * 0.1;
-  cubeGroup.position.y = -pointerCoords.y * 0.1;
+  logoModelGroup.rotation.y = yScrollPosition * 0.5;
+  logoModelGroup.position.x = -pointerCoords.x * 0.1;
+  logoModelGroup.position.y = -pointerCoords.y * 0.1;
 
-  meshCubeArray.forEach((meshCube, index) => {
-    meshCube.rotation.y += rotationSpeeds[index] * deltaTime * 10;
-    meshCube.rotation.z += rotationSpeeds[index] * deltaTime * 10;
-    meshCube.rotation.x += rotationSpeeds[index] * deltaTime * 10;
+  logoModelArray.forEach((logoModel, index) => {
+    logoModel.rotation.y += rotationSpeeds[index] * deltaTime * 10;
+    logoModel.rotation.z += rotationSpeeds[index] * deltaTime * 10;
+    logoModel.rotation.x += rotationSpeeds[index] * deltaTime * 10;
   });
 }
