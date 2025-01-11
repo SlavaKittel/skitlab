@@ -26,7 +26,7 @@ window.addEventListener("pointermove", (event) => {
 });
 
 // Scroll Y wheel and touch
-let wheelScrollY = 0;
+let wheelScrollY = 0.708;
 let currentScrollY = 0;
 window.addEventListener("wheel", (event) => {
   const delta = Math.sign(event.deltaY) * Math.min(Math.abs(event.deltaY), 1000);

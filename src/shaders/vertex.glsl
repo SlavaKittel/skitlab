@@ -61,11 +61,12 @@ void main() {
   // Bell shaper
   float k = 6.5;
   float sizaBell = 0.25;
-  float correctionValue = 0.1;
+  float correctionValueX = 0.1;
+  float correctionValueY = 0.2;
   modelPosition.z += 
-  (1. / (1. + exp(-k * ((finalposition.x - uMousePos.y ) - 0.))) - 1. / (1. + exp(-k * ((finalposition.x - uMousePos.y) - sizaBell))))
+  (1. / (1. + exp(-k * ((finalposition.x - uMousePos.y + correctionValueY ) - 0.))) - 1. / (1. + exp(-k * ((finalposition.x - uMousePos.y + correctionValueY ) - sizaBell))))
   *
-  (1. / (1. + exp(-k * ((finalposition.y + uMousePos.x + correctionValue) - 0.))) - 1. / (1. + exp(-k * ((finalposition.y + uMousePos.x + correctionValue) - sizaBell))));
+  (1. / (1. + exp(-k * ((finalposition.y + uMousePos.x + correctionValueX) - 0.))) - 1. / (1. + exp(-k * ((finalposition.y + uMousePos.x + correctionValueX) - sizaBell))));
 
   // Calculate the final vertex position in clip space
   gl_Position = projectionMatrix * viewMatrix * modelPosition;

@@ -9,7 +9,7 @@ let scene;
 let camera;
 let renderer;
 let mouseBall;
-let indexOfImage = 0;
+let indexOfImageArray = [];
 let pointerCoords = new THREE.Vector2();
 
 // Texture Loader
@@ -17,26 +17,30 @@ const textureLoader = new THREE.TextureLoader();
 const images = ["/img/test1.jpg", "/img/test2.webp", "/img/test3.jpg"];
 const textureImages = images.map((src) => textureLoader.load(src));
 
-// Marker
-const marker = new THREE.Mesh(
-  new THREE.SphereGeometry(0.03, 16, 8),
-  new THREE.MeshBasicMaterial({ color: "red", wireframe: true })
-);
-// scene.add(marker);
+// Markers for bell shape effect
+const markerCount = images.length;
+const markers = [];
+Array.from({ length: markerCount }).forEach((_, index) => {
+  const getColor = () => {
+    if (index === 0) return "red";
+    if (index === 1) return "green";
+    if (index === 2) return "violet";
+  };
+  const marker = new THREE.Mesh(
+    new THREE.SphereGeometry(0.03, 16, 8),
+    new THREE.MeshBasicMaterial({ color: getColor() })
+  );
+  markers.push(marker);
+});
 
 // Helped Planes
 const planeGroup = new THREE.Group();
-const planes = [
-  { color: "red", x: 1.2 },
-  { color: "green", x: 0 },
-  { color: "violet", x: -1.2 },
-];
+const planes = [{ color: "red" }, { color: "green" }, { color: "violet" }];
 planes.forEach((plane, index) => {
   const planeMesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(2, 2, 80, 80),
+    new THREE.PlaneGeometry(2.5, 2.5, 80, 80),
     new THREE.MeshBasicMaterial({ color: plane.color, wireframe: true })
   );
-  planeMesh.position.x = plane.x;
   planeMesh.userData.index = index;
   planeGroup.add(planeMesh);
   newPlanesMesh.push(planeMesh);
@@ -49,17 +53,20 @@ function renderIntersects() {
   raycaster.setFromCamera(pointerCoords, camera);
   const intersectsImages = raycaster.intersectObjects(newImagesMesh);
   const intersects = raycaster.intersectObjects([planeGroup]);
-  let pickObject;
   if (intersects.length) {
-    let { x, y, z } = intersects[0].point;
-    const markerX = x - intersects[0].object.position.x
-    const markerY = y - intersects[0].object.position.y
-    const markerZ = z - intersects[0].object.position.z
-    marker.position.set(markerX, markerY, markerZ);
-
     // Assignment prop index of the Helped Plane
-    pickObject = intersects[0].object;
-    indexOfImage = pickObject.userData.index;
+    indexOfImageArray = intersects.map((intersect) => {
+      const { index } = intersect.object.userData;
+      const marker = markers[index];
+      if (marker) {
+        let { x, y, z } = intersect.point;
+        const markerX = x - intersect.object.position.x;
+        const markerY = y - intersect.object.position.y;
+        const markerZ = z - intersect.object.position.z;
+        marker.position.set(markerX, markerY, markerZ);
+      }
+      return index;
+    });
   }
   // TODO add links
   if (intersectsImages.length) {
@@ -84,7 +91,7 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
   renderer = _renderer;
   mouseBall = _mouseBall;
 
-  // need for logic
+  // Need for intersect with helped planes for bell shape effect
   scene.add(planeGroup);
   planeGroup.visible = false;
 
@@ -99,7 +106,8 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
         uYScrollPosition: { value: 0 },
         uAngle: { value: 0 },
         uProgress: { value: 0 },
-        uMousePos: { value: new THREE.Vector3() },
+        uMousePos: { value: new THREE.Vector3(-1, 1, 0) },
+        uIsMouse: { value: false },
       },
       vertexShader: vertexShader,
       fragmentShader: fragmentShader,
@@ -116,6 +124,7 @@ export function updateImages(yScrollPosition, _pointerCoords) {
   pointerCoords = _pointerCoords;
   window.requestAnimationFrame(renderIntersects);
 
+  // Infinity loop scroll usign percentage
   const yScrollForEach = (index) => {
     const range = 3.76;
     const sizeBetweenfactor = 1.25;
@@ -142,14 +151,20 @@ export function updateImages(yScrollPosition, _pointerCoords) {
 
   // Update Images
   newImagesMesh.forEach((imageMesh, index) => {
-    if (index === indexOfImage)
-      imageMesh.material.uniforms.uMousePos.value.copy(marker.position.clone());
+    // Update Markers position for each Image
+    if (indexOfImageArray.includes(index) && markers[index]) {
+      imageMesh.material.uniforms.uMousePos.value.copy(
+        markers[index].position.clone()
+      );
+    }
+    console.log(imageMesh.material.uniforms.uMousePos.value);
 
     // Update Each Images
     imageMesh.material.uniforms.uYScrollPosition.value = yScrollForEach(index);
     // Update the uniforms for Roll Up and Roll Down
     if (yScrollForEach(index) >= 0) {
-      imageMesh.material.uniforms.uProgress.value = -yScrollForEach(index) + 1.2;
+      imageMesh.material.uniforms.uProgress.value =
+        -yScrollForEach(index) + 1.2;
       imageMesh.material.uniforms.uAngle.value = 0;
     }
     if (yScrollForEach(index) < 0) {

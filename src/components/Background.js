@@ -11,7 +11,7 @@ loader.load("/glb-models/main-logo3.glb", (gltf) => {
   const logoModel = gltf.scene;
   logoModel.scale.set(0.15, 0.15, 0.15);
 
-  let count = 40;
+  let count = 25;
   for (let i = 0; i < count; i += 1) {
     const angle = Math.random() * Math.PI * 2;
     const radius = 8;
