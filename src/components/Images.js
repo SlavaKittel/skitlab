@@ -157,7 +157,6 @@ export function updateImages(yScrollPosition, _pointerCoords) {
         markers[index].position.clone()
       );
     }
-    console.log(imageMesh.material.uniforms.uMousePos.value);
 
     // Update Each Images
     imageMesh.material.uniforms.uYScrollPosition.value = yScrollForEach(index);
