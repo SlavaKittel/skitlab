@@ -12,13 +12,30 @@ let mouseBall;
 let indexOfImageArray = [];
 let pointerCoords = new THREE.Vector2();
 
-// Texture Loader
-const textureLoader = new THREE.TextureLoader();
-const images = ["/img/test1.jpg", "/img/test2.webp", "/img/test3.jpg"];
-const textureImages = images.map((src) => textureLoader.load(src));
+// Video Texturea
+const videos = ["/video/skit1.mp4", "/video/skit2.mp4", "/video/skit3.mp4"];
+const videoTextures = videos.map((src) => {
+  const video = document.createElement("video");
+  video.src = src;
+  video.autoplay = true;
+  video.loop = true;
+  video.muted = true;
+  video.playsInline = true;
+  video.play().catch((error) => {
+    console.error(`Error playing video ${src}:`, error);
+  });
+
+  // Create a VideoTexture for this video
+  const videoTexture = new THREE.VideoTexture(video);
+  videoTexture.minFilter = THREE.LinearFilter;
+  videoTexture.magFilter = THREE.LinearFilter;
+  videoTexture.format = THREE.RGBFormat;
+
+  return videoTexture;
+});
 
 // Markers for bell shape effect
-const markerCount = images.length;
+const markerCount = videos.length;
 const markers = [];
 Array.from({ length: markerCount }).forEach((_, index) => {
   const getColor = () => {
@@ -95,7 +112,7 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
   scene.add(planeGroup);
   planeGroup.visible = false;
 
-  textureImages.map((texture) => {
+  videoTextures.map((texture) => {
     const planeGeometry = new THREE.PlaneGeometry(1, 1, 80, 80);
     const planeMaterial = new THREE.ShaderMaterial({
       extensions: {

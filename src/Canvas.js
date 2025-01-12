@@ -2,9 +2,17 @@ import * as THREE from "three";
 import { getImages, updateImages } from "./components/Images";
 import { getBackground, updateBackground } from "./components/Background";
 import { easeOutCirc } from "./utils/helped";
+// TODO for test
+// import Stats from 'stats.js';
 
 // TODO delete OrbitControls
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+
+// Stats panel
+// const stats = new Stats();
+// stats.showPanel(0);
+// document.body.appendChild(stats.dom);
 
 // Variables
 const width = window.innerWidth;
@@ -58,8 +66,6 @@ camera.position.z = 2;
 scene.background = new THREE.Color(0x87ceeb);
 
 // Lights
-// const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-// scene.add(ambientLight);
 const directLight = new THREE.DirectionalLight(0xffffff, 4);
 directLight.position.set(0, -5, 5);
 scene.add(directLight);
@@ -97,6 +103,10 @@ getBackground(scene);
 
 function update() {
   const deltaTime = clock.getDelta();
+
+  // Stats
+  // stats.begin();
+  // stats.end();
 
   // Update Scroll
   currentScrollY += (wheelScrollY - currentScrollY) * easeOutCirc(easeCoeff);
