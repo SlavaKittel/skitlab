@@ -5,6 +5,7 @@ import fragmentShader from "./../shaders/fragment.glsl?raw";
 // Props and variables
 let newImagesMesh = [];
 let newPlanesMesh = [];
+let imagesMeshIntersectIndex = null;
 let scene;
 let camera;
 let renderer;
@@ -63,6 +64,14 @@ planes.forEach((plane, index) => {
   newPlanesMesh.push(planeMesh);
 });
 
+// Links
+const urls = ["https://google.com", "https://example.com", "https://mail.com"];
+window.addEventListener("click", () => {
+  if (imagesMeshIntersectIndex !== null && urls[imagesMeshIntersectIndex]) {
+    window.open(urls[imagesMeshIntersectIndex], "_blank");
+  }
+});
+
 // Raycaster
 const raycaster = new THREE.Raycaster();
 function renderIntersects() {
@@ -89,15 +98,15 @@ function renderIntersects() {
   if (intersectsImages.length) {
     mouseBall.style.width = "50px";
     mouseBall.style.height = "50px";
-    mouseBall.style.background = "#E3E8F2";
+    mouseBall.style.background = "unset";
     mouseBall.style.color = "#ff004d";
-    // console.log(pickObject.userData.index)
+    imagesMeshIntersectIndex = intersectsImages[0].object.userData.index;
   } else if (!intersectsImages.length) {
     mouseBall.style.width = "20px";
     mouseBall.style.height = "20px";
     mouseBall.style.background = "#000000";
     mouseBall.style.color = "transparent";
-    // console.log('No Intersects')
+    imagesMeshIntersectIndex = null;
   }
   renderer.render(scene, camera);
 }
@@ -112,7 +121,7 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
   scene.add(planeGroup);
   planeGroup.visible = false;
 
-  videoTextures.map((texture) => {
+  videoTextures.map((texture, index) => {
     const planeGeometry = new THREE.PlaneGeometry(1, 1, 80, 80);
     const planeMaterial = new THREE.ShaderMaterial({
       extensions: {
@@ -132,6 +141,7 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
     });
     const mesh = new THREE.Mesh(planeGeometry, planeMaterial);
     scene.add(mesh);
+    mesh.userData.index = index;
     newImagesMesh.push(mesh);
     return mesh;
   });
