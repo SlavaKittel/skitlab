@@ -1,18 +1,18 @@
 import * as THREE from "three";
+import { getLights, updateLights } from "./components/Lights";
 import { getImages, updateImages } from "./components/Images";
 import { getBackground, updateBackground } from "./components/Background";
 import { easeOutCirc } from "./utils/helped";
 // TODO for test
-// import Stats from 'stats.js';
+import Stats from "stats.js";
 
 // TODO delete OrbitControls
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-
 // Stats panel
-// const stats = new Stats();
-// stats.showPanel(0);
-// document.body.appendChild(stats.dom);
+const stats = new Stats();
+stats.showPanel(0);
+document.body.appendChild(stats.dom);
 
 // Variables
 const width = window.innerWidth;
@@ -37,7 +37,8 @@ window.addEventListener("pointermove", (event) => {
 let wheelScrollY = 0.708;
 let currentScrollY = 0;
 window.addEventListener("wheel", (event) => {
-  const delta = Math.sign(event.deltaY) * Math.min(Math.abs(event.deltaY), 1000);
+  const delta =
+    Math.sign(event.deltaY) * Math.min(Math.abs(event.deltaY), 1000);
   wheelScrollY += delta * 0.001;
 });
 let toushScrollY = 0;
@@ -65,16 +66,6 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.z = 2;
 scene.background = new THREE.Color(0x87ceeb);
 
-// Lights
-const directLight = new THREE.DirectionalLight(0xffffff, 4);
-directLight.position.set(0, -5, 5);
-scene.add(directLight);
-const directLight2 = new THREE.DirectionalLight(0xffffff, 1);
-directLight2.position.set(0, 5, 0);
-scene.add(directLight2);
-const lightHelper = new THREE.PointLightHelper(directLight2, 0.5);
-scene.add(lightHelper);
-
 // Resize
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -92,6 +83,9 @@ window.onload = () => {
   document.getElementById("app")?.appendChild(renderer.domElement);
 };
 
+// Lights
+getLights(scene);
+
 // Images
 getImages(scene, camera, renderer, mouseBall);
 
@@ -105,8 +99,8 @@ function update() {
   const deltaTime = clock.getDelta();
 
   // Stats
-  // stats.begin();
-  // stats.end();
+  stats.begin();
+  stats.end();
 
   // Update Scroll
   currentScrollY += (wheelScrollY - currentScrollY) * easeOutCirc(easeCoeff);
@@ -120,6 +114,9 @@ function update() {
   pointerCoords.y = -(ballY / window.innerHeight) * 2 + 1;
   mouseBall.style.left = ballX + "px";
   mouseBall.style.top = ballY + "px";
+
+  // Update Lights
+  updateLights(currentScrollY);
 
   // Update Images
   updateImages(currentScrollY, pointerCoords);

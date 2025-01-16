@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import vertexShader from "./../shaders/vertex.glsl?raw";
 import fragmentShader from "./../shaders/fragment.glsl?raw";
+import { scrollYForEach } from "../utils/helped";
 
 // Props and variables
 let newImagesMesh = [];
@@ -13,7 +14,8 @@ let mouseBall;
 let indexOfImageArray = [];
 let pointerCoords = new THREE.Vector2();
 
-// Video Texturea
+// Video Texture
+// TODO change component on Videos or something
 const videos = ["/video/skit1.mp4", "/video/skit2.mp4", "/video/skit3.mp4"];
 const videoTextures = videos.map((src) => {
   const video = document.createElement("video");
@@ -147,37 +149,27 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
   });
 }
 
-export function updateImages(yScrollPosition, _pointerCoords) {
+export function updateImages(currentScrollY, _pointerCoords) {
   pointerCoords = _pointerCoords;
   window.requestAnimationFrame(renderIntersects);
 
-  // Infinity loop scroll usign percentage
-  const yScrollForEach = (index) => {
-    const range = 3.76;
-    const sizeBetweenfactor = 1.25;
-    const sizeBetweenImages = index * sizeBetweenfactor;
-    const loopRange =
-      ((((-yScrollPosition - sizeBetweenImages) % range) + range) % range) -
-      range / 2;
-    return loopRange;
-  };
-
   // Update Helped Planes
   newPlanesMesh.forEach((planeMesh, index) => {
+    const scrollY = scrollYForEach(index, currentScrollY);
+
     // Update rotation and position based on scroll
     planeMesh.position.z =
-      -(
-        Math.PI -
-        Math.sqrt(Math.pow(yScrollForEach(index), 2) + Math.pow(Math.PI, 2))
-      ) * 2;
+      -(Math.PI - Math.sqrt(Math.pow(scrollY, 2) + Math.pow(Math.PI, 2))) * 2;
     planeMesh.rotation.z = Math.PI / 2;
-    planeMesh.rotation.y = -yScrollForEach(index) / 1.9;
-    planeMesh.position.x = yScrollForEach(index);
-    planeMesh.position.y = -Math.pow(2.0, yScrollForEach(index) * 5 - 14) * 300;
+    planeMesh.rotation.y = -scrollY / 1.9;
+    planeMesh.position.x = scrollY;
+    planeMesh.position.y = -Math.pow(2.0, scrollY * 5 - 14) * 300;
   });
 
   // Update Images
   newImagesMesh.forEach((imageMesh, index) => {
+    const scrollY = scrollYForEach(index, currentScrollY);
+
     // Update Markers position for each Image
     if (indexOfImageArray.includes(index) && markers[index]) {
       imageMesh.material.uniforms.uMousePos.value.copy(
@@ -186,27 +178,23 @@ export function updateImages(yScrollPosition, _pointerCoords) {
     }
 
     // Update Each Images
-    imageMesh.material.uniforms.uYScrollPosition.value = yScrollForEach(index);
+    imageMesh.material.uniforms.uYScrollPosition.value = scrollY;
     // Update the uniforms for Roll Up and Roll Down
-    if (yScrollForEach(index) >= 0) {
-      imageMesh.material.uniforms.uProgress.value =
-        -yScrollForEach(index) + 1.2;
+    if (scrollY >= 0) {
+      imageMesh.material.uniforms.uProgress.value = -scrollY + 1.2;
       imageMesh.material.uniforms.uAngle.value = 0;
     }
-    if (yScrollForEach(index) < 0) {
-      imageMesh.material.uniforms.uProgress.value = yScrollForEach(index) + 1.2;
+    if (scrollY < 0) {
+      imageMesh.material.uniforms.uProgress.value = scrollY + 1.2;
       imageMesh.material.uniforms.uAngle.value = Math.PI / 2;
     }
 
     // Update rotation and position based on scroll
     imageMesh.position.z =
-      -(
-        Math.PI -
-        Math.sqrt(Math.pow(yScrollForEach(index), 2) + Math.pow(Math.PI, 2))
-      ) * 2;
+      -(Math.PI - Math.sqrt(Math.pow(scrollY, 2) + Math.pow(Math.PI, 2))) * 2;
     imageMesh.rotation.z = Math.PI / 2;
-    imageMesh.rotation.y = -yScrollForEach(index) / 1.9;
-    imageMesh.position.x = yScrollForEach(index);
-    imageMesh.position.y = -Math.pow(2.0, yScrollForEach(index) * 5 - 14) * 300;
+    imageMesh.rotation.y = -scrollY / 1.9;
+    imageMesh.position.x = scrollY;
+    imageMesh.position.y = -Math.pow(2.0, scrollY * 5 - 14) * 300;
   });
 }

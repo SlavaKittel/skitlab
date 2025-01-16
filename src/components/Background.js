@@ -1,15 +1,25 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-// <<<< CUBES >>>>
+// <<<< S-3D LOGO >>>>
 const loader = new GLTFLoader();
 let logoModelArray = [];
 let rotationSpeeds = [];
 const logoModelGroup = new THREE.Group();
 
-loader.load("/glb-models/main-logo3.glb", (gltf) => {
+loader.load("/glb-models/main-logo-white.glb", (gltf) => {
   const logoModel = gltf.scene;
   logoModel.scale.set(0.15, 0.15, 0.15);
+
+  logoModel.traverse((child) => {
+    if (child.isMesh) {
+      child.material = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 1.0,
+        roughness: 0.0,
+      });
+    }
+  });
 
   let count = 25;
   for (let i = 0; i < count; i += 1) {
@@ -42,7 +52,10 @@ function nameBoundaryTexture(name) {
   const loader = new THREE.TextureLoader();
   return loader.load(`./texture/TilesMosaicPennyround001/${name}.png`);
 }
-const colorTexture = nameBoundaryTexture("TilesMosaicPennyround001_COL_1K");
+const colorTexture = nameBoundaryTexture("TilesMosaicPennyround001_BUMP_1K");
+colorTexture.encoding = THREE.LinearEncoding;
+colorTexture.needsUpdate = true;
+colorTexture.colorSpace = THREE.SRGBColorSpace;
 const displacementTexture = nameBoundaryTexture(
   "TilesMosaicPennyround001_DISP_1K"
 );
@@ -83,7 +96,6 @@ const material = new THREE.MeshStandardMaterial({
 });
 const meshCylinder = new THREE.Mesh(geometry, material);
 meshCylinder.rotation.order = "XZY";
-meshCylinder.rotation.z = THREE.MathUtils.degToRad(-5);
 meshCylinder.position.z = 27;
 
 export function getBackground(scene) {
