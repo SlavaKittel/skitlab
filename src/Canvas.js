@@ -36,12 +36,20 @@ window.addEventListener("pointermove", (event) => {
 // Scroll Y wheel and touch
 let wheelScrollY = 0.708;
 let currentScrollY = 0;
+let lastTime = 0;
 window.addEventListener("wheel", (event) => {
+  const currentTime = performance.now();
+  const deltaTime = (currentTime - lastTime) / 1000;
+  lastTime = currentTime;
+  const timeFactor = deltaTime * 60;
+
   const delta =
     Math.sign(event.deltaY) * Math.min(Math.abs(event.deltaY), 1000);
-  wheelScrollY += delta * 0.001;
+  wheelScrollY += delta * 0.001 * timeFactor;
 });
+
 let toushScrollY = 0;
+// TODO need to add performance.now() for all listeners;
 window.addEventListener("touchstart", (event) => {
   toushScrollY = event.touches[0].clientY;
 });
@@ -49,7 +57,7 @@ window.addEventListener("touchmove", (event) => {
   const touchCurrentY = event.touches[0].clientY;
   const touchDelta = touchCurrentY - toushScrollY;
   wheelScrollY -= touchDelta * 0.005;
-  toushScrollY = touchCurrentY; // Update for continuous tracking
+  toushScrollY = touchCurrentY;
 });
 
 // Clock
@@ -104,6 +112,8 @@ function update() {
 
   // Update Scroll
   currentScrollY += (wheelScrollY - currentScrollY) * easeOutCirc(easeCoeff);
+  // TODO for test;
+  console.log(wheelScrollY.toFixed(2));
 
   // Update Pointer and MouseBall
   let distX = mouseX - ballX;
