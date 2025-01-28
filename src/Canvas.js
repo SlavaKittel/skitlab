@@ -34,8 +34,8 @@ window.addEventListener("pointermove", (event) => {
 });
 
 // Scroll Y wheel and touch
-let wheelScrollY = 0.708;
-let currentScrollY = 0;
+let wheelScroll = 0.708;
+let currentScroll = 0;
 let lastTime = 0;
 window.addEventListener("wheel", (event) => {
   const currentTime = performance.now();
@@ -43,20 +43,23 @@ window.addEventListener("wheel", (event) => {
   lastTime = currentTime;
   const timeFactor = deltaTime * 60;
 
-  const delta =
+  const deltaY =
     Math.sign(event.deltaY) * Math.min(Math.abs(event.deltaY), 1000);
-  wheelScrollY += delta * 0.001 * timeFactor;
+  const deltaX =
+    Math.sign(event.deltaX) * Math.min(Math.abs(event.deltaX), 1000);
+  wheelScroll += deltaY * 0.0017 * timeFactor;
+  wheelScroll += deltaX * 0.0017 * timeFactor;
 });
 
 let toushScrollY = 0;
-// TODO need to add performance.now() for all listeners;
+// TODO need to add performance.now() for all listeners; Add also for X and Y
 window.addEventListener("touchstart", (event) => {
   toushScrollY = event.touches[0].clientY;
 });
 window.addEventListener("touchmove", (event) => {
   const touchCurrentY = event.touches[0].clientY;
   const touchDelta = touchCurrentY - toushScrollY;
-  wheelScrollY -= touchDelta * 0.005;
+  wheelScroll -= touchDelta * 0.005;
   toushScrollY = touchCurrentY;
 });
 
@@ -111,9 +114,7 @@ function update() {
   stats.end();
 
   // Update Scroll
-  currentScrollY += (wheelScrollY - currentScrollY) * easeOutCirc(easeCoeff);
-  // TODO for test;
-  console.log(wheelScrollY.toFixed(2));
+  currentScroll += (wheelScroll - currentScroll) * easeOutCirc(easeCoeff);
 
   // Update Pointer and MouseBall
   let distX = mouseX - ballX;
@@ -126,13 +127,13 @@ function update() {
   mouseBall.style.top = ballY + "px";
 
   // Update Lights
-  updateLights(currentScrollY);
+  updateLights(currentScroll);
 
   // Update Images
-  updateImages(currentScrollY, pointerCoords);
+  updateImages(currentScroll, pointerCoords);
 
   // Update Background
-  updateBackground(currentScrollY, pointerCoords, deltaTime);
+  updateBackground(currentScroll, pointerCoords, deltaTime);
 
   // Update Canvas
   requestAnimationFrame(update);
