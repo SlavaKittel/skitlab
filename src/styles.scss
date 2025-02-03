@@ -1,0 +1,243 @@
+// Variables
+$mobile: 768px;
+
+html,
+body {
+  cursor: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin: 0;
+  overscroll-behavior: none;
+  font-family: "Bebas Neue", serif;
+}
+
+/* Main header */
+section.main-header {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  height: 44px;
+  padding-top: 10px;
+  margin-left: 20px;
+  width: calc(100% - 40px);
+  position: relative;
+  z-index: 2;
+  .social-btns {
+    display: flex;
+    gap: 8px;
+    grid-column: 1 / 2;
+    grid-row: 1;
+    .social-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 44px;
+      border-radius: 6px;
+      border: 1px solid var(--gray);
+    }
+  }
+  .logo {
+    grid-column: 2 / 3;
+    grid-row: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .right-side {
+    display: flex;
+    gap: 40px;
+    justify-content: flex-end;
+    grid-column: 3 / 4;
+    grid-row: 1;
+    .about-us-btn {
+      grid-column: 3 / 4;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: var(--bright);
+      font-size: 20px;
+    }
+    .contact-us-btn {
+      grid-column: 3 / 4;
+      grid-row: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 137px;
+      background-color: var(--red);
+      color: var(--bright);
+      font-size: 20px;
+      border-radius: 6px;
+    }
+    .burger-menu {
+      display: none;
+    }
+  }
+  @media (max-width: $mobile) {
+    height: 40px;
+    grid-template-columns: 1fr 1fr;
+    .social-btns {
+      display: none;
+    }
+    .logo {
+      grid-column: 1 / 2;
+      grid-row: 1;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    .right-side {
+      gap: 10px;
+      .about-us-btn {
+        display: none;
+      }
+      .contact-us-btn {
+        width: 101px;
+        font-size: 16px;
+      }
+      .burger-menu {
+        display: flex;
+        border: 1px solid var(--gray);
+        box-sizing: border-box;
+        width: 40px;
+        border-radius: 6px;
+        .ham {
+          cursor: pointer;
+          -webkit-tap-highlight-color: transparent;
+          transition: transform 400ms;
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+        .ham.active {
+          transform: rotate(45deg);
+        }
+        .line {
+          fill: none;
+          transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
+          stroke: var(--bright);
+          stroke-width: 4;
+        }
+        .ham .top {
+          stroke-dasharray: 40 82;
+        }
+        .ham .middle {
+          stroke-dasharray: 40 111;
+        }
+        .ham .bottom {
+          stroke-dasharray: 40 161;
+        }
+        .ham.active .top {
+          stroke-dasharray: 19 82;
+          stroke-dashoffset: -62px;
+        }
+        .ham.active .middle {
+          stroke-dashoffset: 22px;
+        }
+        .ham.active .bottom {
+          stroke-dashoffset: -83px;
+        }
+      }
+    }
+  }
+}
+
+/* Burger Menu Content for Mobile */
+section.burger-menu-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--background);
+  position: absolute;
+  top: -198px;
+  transition: top 0.3s ease-in-out;
+  width: 100%;
+  height: 198px;
+  z-index: 1;
+  border-bottom: 1px solid var(--dark);
+  @media (min-width: calc($mobile + 1px)) {
+    display: none;
+  }
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--dark);
+    margin-top: 60px;
+  }
+  .about-us-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% - 40px);
+    height: 40px;
+    color: var(--bright);
+    border-radius: 6px;
+    border: 1px solid var(--gray);
+    margin-top: 20px;
+  }
+  .social-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    .social-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      border: 1px solid var(--gray);
+    }
+  }
+}
+section.burger-menu-content.active {
+  top: 0px;
+}
+
+/* Mouse Ball */
+section.mouse-ball {
+  font-weight: 400;
+  color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px) invert(100%);
+  z-index: 99;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  /* TODO add mode? */
+  /* mix-blend-mode: difference; */
+  transition: width 0.3s ease-in-out, height 0.3s ease-in-out,
+    background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* Application */
+section.app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: auto;
+  canvas {
+    position: fixed;
+    overflow: hidden;
+    display: block;
+  }
+}

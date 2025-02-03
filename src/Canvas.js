@@ -10,9 +10,10 @@ import Stats from "stats.js";
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 // Stats panel
-const stats = new Stats();
-stats.showPanel(0);
-document.body.appendChild(stats.dom);
+// TODO delete Stats panel
+// const stats = new Stats();
+// stats.showPanel(0);
+// document.body.appendChild(stats.dom);
 
 // Variables
 const width = window.innerWidth;
@@ -34,21 +35,15 @@ window.addEventListener("pointermove", (event) => {
 });
 
 // Scroll Y wheel and touch
-let wheelScroll = 0.708;
+let wheelScroll = 0.63;
 let currentScroll = 0;
-let lastTime = 0;
 window.addEventListener("wheel", (event) => {
-  const currentTime = performance.now();
-  const deltaTime = (currentTime - lastTime) / 1000;
-  lastTime = currentTime;
-  const timeFactor = deltaTime * 60;
-
   const deltaY =
     Math.sign(event.deltaY) * Math.min(Math.abs(event.deltaY), 1000);
   const deltaX =
     Math.sign(event.deltaX) * Math.min(Math.abs(event.deltaX), 1000);
-  wheelScroll += deltaY * 0.0017 * timeFactor;
-  wheelScroll += deltaX * 0.0017 * timeFactor;
+  wheelScroll += deltaY * 0.001;
+  wheelScroll += deltaX * 0.001;
 });
 
 let toushScrollY = 0;
@@ -110,8 +105,9 @@ function update() {
   const deltaTime = clock.getDelta();
 
   // Stats
-  stats.begin();
-  stats.end();
+  // TODO delete Stats panel
+  // stats.begin();
+  // stats.end();
 
   // Update Scroll
   currentScroll += (wheelScroll - currentScroll) * easeOutCirc(easeCoeff);

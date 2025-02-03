@@ -7,97 +7,69 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link rel="icon" type="image" href="/img/Spoint-logo.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist+Mono:wght@100..900&family=Teko:wght@300..700&display=swap" rel="stylesheet">
-    <title>skitlab</title>
+    <link rel="icon" type="image" href="/img/skit-logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist+Mono:wght@100..900&family=Teko:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.scss" />
+    <title>skitstudio</title>
   </head>
-  <style type="text/css" media="screen">
-    html, body {
-      cursor: none;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      margin: 0;
-      overscroll-behavior: none;
-    }
-
-    /* Landign page */
-    section.landing-page {
-      width: 100%;
-      /* TODO delete for mobile */
-      height: 100vh;
-      font-family: "Bebas Neue", sans-serif;
-      font-weight: 400;
-      font-style: normal;
-      z-index: 1;
-      position: relative;
-      overflow-y: scroll;
-      color: #4a4747;
-      .logo {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 10px;
-      }
-      .mouse-ball {
-        font-family: "Bebas Neue", serif;
-        font-weight: 400;
-        color: transparent;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        backdrop-filter: blur(5px) invert(100%);
-        z-index: 99;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        pointer-events: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translate(-50%, -50%);
-        /* TODO add mode? */
-        /* mix-blend-mode: difference; */
-        transition: width 0.3s ease-in-out, height 0.3s ease-in-out, background 0.3s ease-in-out, color 0.3s ease-in-out;
-      }
-    }
-
-    /* Application */
-    section.app {
-      position: fixed;
-      top: 0;
-      left: 0;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      touch-action: auto;
-      canvas {
-        position: fixed;
-        overflow: hidden;
-        display: block;
-      }
-    }
-  </style>
   <body>
-    <section class="landing-page">
-      <div class="mouse-ball">CLICK</div>
+    <section class="main-header">
+      <div class="social-btns">
+        <div class="social-btn">
+          <img src="img/linkedin.svg" alt="linked-in" />
+        </div>
+        <div class="social-btn">
+          <img src="img/linktree.svg" alt="linktree" />
+        </div>
+      </div>
       <div class="logo">
-        <img src="img/skit-logo.svg" alt="skit-logo" width="80" />
+        <img src="img/skit-logo.svg" alt="skit-logo" height="34" />
+      </div>
+      <div class="right-side">
+        <div class="about-us-btn">About Us</div>
+        <div class="contact-us-btn">Contact Us</div>
+        <div class="burger-menu" id="burgerMenu">
+          <svg class="ham" viewBox="0 0 100 100" width="80" id="burgeMenuSvg">
+            <path
+              class="line top"
+              d="m 70,33 h -40 c 0,0 -6,1.368796 -6,8.5 0,7.131204 6,8.5013 6,8.5013 l 20,-0.0013"
+            />
+            <path class="line middle" d="m 70,50 h -40" />
+            <path
+              class="line bottom"
+              d="m 69.575405,67.073826 h -40 c -5.592752,0 -6.873604,-9.348582 1.371031,-9.348582 8.244634,0 19.053564,21.797129 19.053564,12.274756 l 0,-40"
+            />
+          </svg>
+        </div>
       </div>
     </section>
+
+    <section class="burger-menu-content" id="burgerMenuContent">
+      <div class="divider"></div>
+      <div class="about-us-btn">About Us</div>
+      <div class="social-btns">
+        <div class="social-btn">
+          <img src="img/linkedin.svg" alt="linked-in" />
+        </div>
+        <div class="social-btn">
+          <img src="img/linktree.svg" alt="linktree" />
+        </div>
+      </div>
+    </section>
+
+    <section class="mouse-ball">CLICK</section>
 
     <section class="app">
       <div id="app" />
     </section>
 
     <script type="module" src="./Canvas.js"></script>
+    <script type="module" src="./utils/event-listeners"></script>
+    <script type="module" src="./utils/theme"></script>
   </body>
 </html>
