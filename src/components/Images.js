@@ -135,7 +135,6 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
         uAngle: { value: 0 },
         uProgress: { value: 0 },
         uMousePos: { value: new THREE.Vector3(-1, 1, 0) },
-        uIsMouse: { value: false },
       },
       vertexShader: vertexShader,
       fragmentShader: fragmentShader,

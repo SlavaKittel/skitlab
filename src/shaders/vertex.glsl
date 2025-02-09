@@ -1,5 +1,4 @@
 
-uniform float uYScrollPosition;
 uniform float uAngle;
 uniform float uProgress;
 uniform vec3 uMousePos;

@@ -1,10 +1,11 @@
 import * as THREE from "three";
 import { getLights, updateLights } from "./components/Lights";
 import { getImages, updateImages } from "./components/Images";
+import { updateSpringyLine } from "./utils/springy-line";
 import { getBackground, updateBackground } from "./components/Background";
 import { easeOutCirc } from "./utils/helped";
 // TODO for test
-import Stats from "stats.js";
+// import Stats from "stats.js";
 
 // TODO delete OrbitControls
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -25,7 +26,7 @@ let mouseX = 0;
 let mouseY = 0;
 let ballX = 0;
 let ballY = 0;
-let speed = 0.09;
+let speed = 0.12;
 const easeCoeff = 0.001;
 
 // Pointermove listener
@@ -57,9 +58,6 @@ window.addEventListener("touchmove", (event) => {
   wheelScroll -= touchDelta * 0.005;
   toushScrollY = touchCurrentY;
 });
-
-// Clock
-const clock = new THREE.Clock();
 
 // Scene and Camera
 const scene = new THREE.Scene();
@@ -102,12 +100,13 @@ getBackground(scene);
 // const controls = new OrbitControls(camera, renderer.domElement);
 
 function update() {
-  const deltaTime = clock.getDelta();
-
   // Stats
   // TODO delete Stats panel
   // stats.begin();
   // stats.end();
+
+  // Update Burger Menu Springy Line
+  updateSpringyLine();
 
   // Update Scroll
   currentScroll += (wheelScroll - currentScroll) * easeOutCirc(easeCoeff);
@@ -129,7 +128,7 @@ function update() {
   updateImages(currentScroll, pointerCoords);
 
   // Update Background
-  updateBackground(currentScroll, pointerCoords, deltaTime);
+  updateBackground(currentScroll, pointerCoords);
 
   // Update Canvas
   requestAnimationFrame(update);

@@ -20,6 +20,7 @@
     "vite": "^4.0.4"
   },
   "dependencies": {
+    "gsap": "^3.12.7",
     "stats.js": "^0.17.0",
     "three": "^0.171.0",
     "virtual-scroll": "^2.2.1"
