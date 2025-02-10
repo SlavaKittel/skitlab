@@ -4,6 +4,7 @@ import { getImages, updateImages } from "./components/Images";
 import { updateSpringyLine } from "./utils/springy-line";
 import { getBackground, updateBackground } from "./components/Background";
 import { easeOutCirc } from "./utils/helped";
+import { state } from "./store/store";
 // TODO for test
 // import Stats from "stats.js";
 
@@ -39,6 +40,7 @@ window.addEventListener("pointermove", (event) => {
 let wheelScroll = 0.63;
 let currentScroll = 0;
 window.addEventListener("wheel", (event) => {
+  if (state.isOpenMenu) return;
   const deltaY =
     Math.sign(event.deltaY) * Math.min(Math.abs(event.deltaY), 1000);
   const deltaX =
@@ -50,9 +52,11 @@ window.addEventListener("wheel", (event) => {
 let toushScrollY = 0;
 // TODO need to add performance.now() for all listeners; Add also for X and Y
 window.addEventListener("touchstart", (event) => {
+  if (state.isOpenMenu) return;
   toushScrollY = event.touches[0].clientY;
 });
 window.addEventListener("touchmove", (event) => {
+  if (state.isOpenMenu) return;
   const touchCurrentY = event.touches[0].clientY;
   const touchDelta = touchCurrentY - toushScrollY;
   wheelScroll -= touchDelta * 0.005;

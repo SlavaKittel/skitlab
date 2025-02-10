@@ -1,11 +1,12 @@
 import { gsap } from "gsap";
+import { state, toggleMenuState } from "../store/store";
+
 // TODO: Add breakpoints  for state when the menu is open to fix the issue with the springy line
 import { breakpoints } from "./mixin";
 
 // Constants & Initial States
 const { mobile } = breakpoints;
 const heightContent = 300;
-let isMenuOpen = false;
 let connectedMouse = false;
 let connectedTop = false;
 let connectedBottom = false;
@@ -29,7 +30,6 @@ const burgerMenuBtn = document.getElementById("burgerMenuBtn");
 
 // Window Resize Event
 window.addEventListener("resize", () => {
-  if (window.innerWidth > mobile) isMenuOpen = !isMenuOpen;
   burgerMenuContentWidth = window.innerWidth + 4;
   p1.x = burgerMenuContentWidth / 2;
   p2.x = burgerMenuContentWidth;
@@ -37,7 +37,7 @@ window.addEventListener("resize", () => {
 
 // Burger Menu Toggle
 burgerMenuBtn.addEventListener("click", () => {
-  isMenuOpen = !isMenuOpen;
+  toggleMenuState();
 });
 
 // Mouse Move Event
@@ -95,7 +95,7 @@ export function updateSpringyLine() {
     !connectedTop &&
     pathReactPosition.y < -55 &&
     pathReactPosition.y > -70 &&
-    !isMenuOpen
+    !state.isOpenMenu
   ) {
     connectedTop = true;
     gsap.killTweensOf(p1);
@@ -106,7 +106,11 @@ export function updateSpringyLine() {
   }
 
   // Bottom Collision Detection
-  if (!connectedBottom && pathReactPosition.y < -heightContent && isMenuOpen) {
+  if (
+    !connectedBottom &&
+    pathReactPosition.y < -heightContent &&
+    state.isOpenMenu
+  ) {
     connectedBottom = true;
     gsap.killTweensOf(p1);
     offsetX = burgerMenuContentWidth / 2;
