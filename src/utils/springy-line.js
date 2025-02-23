@@ -1,11 +1,7 @@
 import { gsap } from "gsap";
-import { state, toggleMenuState } from "../store/store";
-
-// TODO: Add breakpoints  for state when the menu is open to fix the issue with the springy line
-import { breakpoints } from "./mixin";
+import { state } from "../store/store";
 
 // Constants & Initial States
-const { mobile } = breakpoints;
 const heightContent = 300;
 let connectedMouse = false;
 let connectedTop = false;
@@ -26,18 +22,12 @@ let p2 = { x: burgerMenuContentWidth, y: startY };
 const svg = document.getElementById("svg-box-springy");
 const displayedLinePath = document.getElementById("displayed-path");
 const pathTrigger = document.getElementById("path-trigger");
-const burgerMenuBtn = document.getElementById("burgerMenuBtn");
 
 // Window Resize Event
 window.addEventListener("resize", () => {
   burgerMenuContentWidth = window.innerWidth + 4;
   p1.x = burgerMenuContentWidth / 2;
   p2.x = burgerMenuContentWidth;
-});
-
-// Burger Menu Toggle
-burgerMenuBtn.addEventListener("click", () => {
-  toggleMenuState();
 });
 
 // Mouse Move Event

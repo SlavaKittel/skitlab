@@ -96,18 +96,17 @@ function renderIntersects() {
       return index;
     });
   }
-  // TODO add links
   if (intersectsImages.length) {
-    mouseBall.style.width = "50px";
-    mouseBall.style.height = "50px";
+    mouseBall.style.width = "55px";
+    mouseBall.style.height = "55px";
     mouseBall.style.background = "unset";
-    mouseBall.style.color = "#ff004d";
+    mouseBall.querySelector("img").style.opacity = 1;
     imagesMeshIntersectIndex = intersectsImages[0].object.userData.index;
   } else if (!intersectsImages.length) {
     mouseBall.style.width = "20px";
     mouseBall.style.height = "20px";
-    mouseBall.style.background = "#000000";
-    mouseBall.style.color = "transparent";
+    mouseBall.style.background = "#ffffff3e";
+    mouseBall.querySelector("img").style.opacity = 0;
     imagesMeshIntersectIndex = null;
   }
   renderer.render(scene, camera);

@@ -1,6 +1,3 @@
-@use 'variables' as *;
-
-/* Burger Menu Content for Mobile */
 section.burger-menu-content {
   display: flex;
   flex-direction: column;
@@ -10,10 +7,7 @@ section.burger-menu-content {
   transition: top 0.3s ease-in-out;
   width: 100%;
   height: 250px;
-  z-index: 1;
-  @media (min-width: calc($mobile + 1px)) {
-    display: none;
-  }
+  z-index: 2;
   .divider {
     width: 100%;
     height: 2px;
@@ -32,6 +26,9 @@ section.burger-menu-content {
     border: 1px solid var(--gray);
     margin-top: 20px;
     z-index: 1;
+    padding-top: 4px;
+    box-sizing: border-box;
+    text-transform: uppercase;
   }
   .social-btns {
     display: flex;
@@ -59,6 +56,7 @@ section.burger-menu-content {
       left: 0;
     }
     #displayed-path {
+      fill: var(--background);
       stroke: var(--gray);
       stroke-width: 1;
     }
@@ -68,7 +66,12 @@ section.burger-menu-content {
     }
   }
 }
-section.burger-menu-content.active {
-  top: 0px;
-}
 
+.breakpoint-mobile,
+.breakpoint-mobileSmall {
+  section.burger-menu-content {
+    &.active {
+      top: 0px;
+    }
+  }
+}

@@ -1,0 +1,376 @@
+section.about-us-page {
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--background);
+  z-index: 1;
+  position: absolute;
+  top: -100vh;
+  transition: top 0.3s ease-in-out;
+  display: none;
+  &.active {
+    top: 0px;
+  }
+
+  // TODO delete
+  .test {
+    position: absolute;
+    top: 310px;
+    width: 100%;
+    overflow: hidden;
+    background: rgb(203, 19, 19);
+    font-size: 210px;
+  }
+
+  .blocks {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1278px;
+    margin: 142px auto 0;
+    .block {
+      min-height: 498px;
+      width: 50vw;
+      position: relative;
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 40px;
+      .border-gradient {
+        position: absolute;
+        inset: -1px;
+        border: 1px solid #0000;
+        border-radius: 20px;
+        -webkit-mask: linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        &::before {
+          content: "";
+          position: absolute;
+          inset: -1px;
+          transform: translate(0px, 0px);
+        }
+      }
+    }
+    .welcome {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      color: var(--bright);
+      margin-left: 20px;
+      .border-gradient {
+        &::before {
+          background: linear-gradient(
+            var(--welcomeAngle),
+            rgba(237, 240, 246, 0.5) 0%,
+            rgba(237, 240, 246, 0) 50%,
+            rgba(237, 240, 246, 0.5) 100%
+          );
+        }
+      }
+      .welcome-content {
+        font-size: 100px;
+        display: flex;
+        flex-wrap: wrap;
+        white-space: pre;
+        .welcome-text {
+          line-height: 1;
+        }
+        .s-logo {
+          display: flex;
+          align-items: center;
+          height: auto;
+          padding: 0 0 16px 10px;
+        }
+        .to-skit-studio {
+          display: flex;
+          height: max-content;
+          line-height: 1;
+          .studio {
+            color: var(--red);
+          }
+        }
+        .slogan {
+          font-family: "Mulish", serif;
+          font-size: 18px;
+          font-weight: 300;
+          padding-top: 20px;
+          margin-bottom: auto;
+        }
+      }
+      .footer {
+        margin-top: auto;
+        display: flex;
+        align-items: end;
+        padding-top: 40px;
+        .portfolio-btn {
+          border: 1px solid var(--gray);
+          border-radius: 6px;
+          font-size: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 44px;
+          min-width: 137px;
+          padding-top: 4px;
+          box-sizing: border-box;
+          font-weight: 500;
+        }
+        .skills {
+          font-size: 24px;
+          display: flex;
+          align-items: flex-end;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          column-gap: 8px;
+          padding-left: 20px;
+          margin-left: auto;
+          color: var(--gray);
+          font-weight: 300;
+        }
+      }
+    }
+    .description {
+      font-family: "Mulish", serif;
+      margin-right: 20px;
+      font-size: 16px;
+      font-weight: 300;
+      box-sizing: border-box;
+      color: var(--bright);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      .border-gradient {
+        &::before {
+          background: linear-gradient(
+            var(--descriptionAngle),
+            rgba(237, 240, 246, 0.5) 0%,
+            rgba(237, 240, 246, 0) 50%,
+            rgba(237, 240, 246, 0.5) 100%
+          );
+        }
+      }
+      .highlight {
+        font-weight: 700;
+      }
+      .footer {
+        margin-top: auto;
+        font-family: "Teko", serif;
+        display: flex;
+        align-items: end;
+        padding-top: 20px;
+        .contact-us-btn {
+          font-weight: 500;
+          background-color: var(--red);
+          border-radius: 6px;
+          font-size: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 44px;
+          min-width: 137px;
+          padding-top: 4px;
+          box-sizing: border-box;
+        }
+        .portfolio-btn {
+          display: none;
+        }
+        .start-text {
+          font-size: 24px;
+          display: flex;
+          align-items: flex-end;
+          margin-left: auto;
+          color: var(--red);
+          font-weight: 300;
+          text-align: right;
+          word-wrap: break-word;
+          white-space: normal;
+        }
+      }
+    }
+  }
+}
+
+.breakpoint-desktop,
+.breakpoint-tablet {
+  section.about-us-page {
+    .blocks {
+      .block {
+        padding: 30px;
+      }
+      .welcome-content {
+        font-size: 80px;
+      }
+    }
+  }
+}
+
+.breakpoint-tablet {
+  section.about-us-page {
+    .blocks {
+      margin: 130px auto 0;
+    }
+  }
+}
+
+.breakpoint-tablet,
+.breakpoint-mobile,
+.breakpoint-mobileSmall {
+  section.about-us-page {
+    .blocks {
+      flex-direction: column;
+      width: 100%;
+      .block {
+        min-height: unset;
+        width: calc(100% - 40px);
+      }
+      .welcome {
+        .s-logo {
+          display: none;
+        }
+      }
+      .description {
+        margin-left: 20px;
+      }
+    }
+  }
+}
+
+.breakpoint-mobile {
+  section.about-us-page {
+    top: 100vh;
+    &.active {
+      top: 0px;
+    }
+    .blocks {
+      margin: 80px auto 0;
+      .block {
+        padding: 20px;
+      }
+      .welcome {
+        .welcome-content {
+          font-size: 50px;
+          .slogan {
+            font-size: 16px;
+            width: 400px;
+          }
+        }
+        .footer {
+          .portfolio-btn {
+            font-size: 16px;
+            height: 40px;
+            min-width: 121px;
+            padding-top: 3px;
+          }
+          .skills {
+            font-size: 18px;
+            padding-left: unset;
+          }
+        }
+      }
+      .description {
+        .footer {
+          .contact-us-btn {
+            font-size: 16px;
+            height: 40px;
+            min-width: 121px;
+            padding-top: 3px;
+          }
+          .start-text {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+    filter: unset;
+    transition: filter 0.3s ease-in-out, top 0.3s ease-in-out;
+    &.blur-active {
+      filter: blur(10px);
+    }
+  }
+}
+
+.breakpoint-mobileSmall {
+  section.about-us-page {
+    top: 100vh;
+    &.active {
+      top: 0px;
+    }
+    .blocks {
+      gap: 16px;
+      margin: 70px auto 0;
+      .block {
+        width: calc(100% - 32px);
+        padding: 16px;
+      }
+      .welcome {
+        padding: 0;
+        backdrop-filter: unset;
+        align-items: center;
+        margin-left: 16px;
+        .border-gradient {
+          display: none;
+        }
+        .welcome-content {
+          justify-content: center;
+          font-size: 36px;
+          .slogan {
+            padding-top: 8px;
+            font-size: 14px;
+          }
+        }
+        .footer {
+          padding-top: 16px;
+          .portfolio-btn {
+            display: none;
+          }
+          .skills {
+            font-size: 16px;
+            padding-left: unset;
+          }
+        }
+      }
+      .description {
+        margin-left: 16px;
+        font-size: 14px;
+        .footer {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 16px;
+          padding-top: unset;
+          .contact-us-btn {
+            font-size: 16px;
+            height: 36px;
+            width: calc(50% - 8px);
+            padding-top: 3px;
+            min-width: unset;
+          }
+          .portfolio-btn {
+            border: 1px solid var(--gray);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            height: 36px;
+            width: calc(50% - 8px);
+            padding-top: 4px;
+            box-sizing: border-box;
+          }
+          .start-text {
+            font-size: 16px;
+            margin-left: unset;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+          }
+        }
+      }
+    }
+    filter: unset;
+    transition: filter 0.3s ease-in-out, top 0.3s ease-in-out;
+    &.blur-active {
+      filter: blur(10px);
+    }
+  }
+}

@@ -1,6 +1,6 @@
 html,
 body {
-  cursor: none;
+  cursor: url("s-logo.svg");
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -9,8 +9,10 @@ body {
   user-select: none;
   margin: 0;
   overscroll-behavior: none;
-  font-family: "Bebas Neue", serif;
+  font-family: "Teko", serif;
+  font-weight: 400;
   background-color: var(--background);
+  overflow: hidden;
 }
 
 /* Application */
@@ -25,17 +27,22 @@ section.app {
   -ms-user-select: none;
   user-select: none;
   touch-action: auto;
-  .blur {
-    filter: unset;
-    transition: filter 0.3s ease-in-out;
-    &.blur-active {
-      filter: blur(10px);
-    }
-  }
   canvas {
     position: fixed;
     overflow: hidden;
     display: block;
+  }
+}
+.breakpoint-mobile,
+.breakpoint-mobileSmall {
+  section.app {
+    .blur {
+      filter: unset;
+      transition: filter 0.3s ease-in-out;
+      &.blur-active {
+        filter: blur(10px);
+      }
+    }
   }
 }
 
@@ -46,7 +53,7 @@ section.mouse-ball {
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(5px) invert(100%);
+  backdrop-filter: blur(5px);
   z-index: 99;
   width: 20px;
   height: 20px;
@@ -57,8 +64,13 @@ section.mouse-ball {
   left: 0;
   transform: translate(-50%, -50%);
   will-change: transform;
+  border: 1px solid var(--bright);
   /* TODO add mode? */
   /* mix-blend-mode: difference; */
-  transition: width 0.3s ease-in-out, height 0.3s ease-in-out,
-    background 0.3s ease-in-out, color 0.3s ease-in-out;
+  transition: width 0.1s ease-in-out, height 0.1s ease-in-out,
+    background 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  img {
+    transition: opacity 0.3s ease-in-out;
+  }
+
 }

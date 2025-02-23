@@ -12,5 +12,9 @@ export const background = "#030a19";
 
 // Breakpoints
 export const breakpoints = {
-  mobile: 768,
+  mobileSmall: 360,
+  mobile: 480,
+  tablet: 768,
+  desktop: 960,
+  desktopLarge: 1280,
 };

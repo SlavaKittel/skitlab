@@ -22,12 +22,16 @@ const width = window.innerWidth;
 const height = window.innerHeight;
 
 const pointerCoords = new THREE.Vector2();
+const pointerSmoothCoords = new THREE.Vector2();
 const mouseBall = document.querySelector(".mouse-ball");
 let mouseX = 0;
 let mouseY = 0;
 let ballX = 0;
 let ballY = 0;
-let speed = 0.12;
+let ballSmoothX = 0;
+let ballSmoothY = 0;
+let speedMouse = 0.3;
+let speedSmoothMouse = 0.04;
 const easeCoeff = 0.001;
 
 // Pointermove listener
@@ -118,10 +122,16 @@ function update() {
   // Update Pointer and MouseBall
   let distX = mouseX - ballX;
   let distY = mouseY - ballY;
-  ballX = ballX + distX * speed;
-  ballY = ballY + distY * speed;
+  let distSmoothX = mouseX - ballSmoothX;
+  let distSmoothY = mouseY - ballSmoothY;
+  ballX += distX * speedMouse;
+  ballY += distY * speedMouse;
+  ballSmoothX += distSmoothX * speedSmoothMouse;
+  ballSmoothY += distSmoothY * speedSmoothMouse;
   pointerCoords.x = (ballX / window.innerWidth) * 2 - 1;
   pointerCoords.y = -(ballY / window.innerHeight) * 2 + 1;
+  pointerSmoothCoords.x = (ballSmoothX / window.innerWidth) * 2 - 1;
+  pointerSmoothCoords.y = -(ballSmoothY / window.innerHeight) * 2 + 1;
   mouseBall.style.left = ballX + "px";
   mouseBall.style.top = ballY + "px";
 
@@ -129,10 +139,10 @@ function update() {
   updateLights(currentScroll);
 
   // Update Images
-  updateImages(currentScroll, pointerCoords);
+  updateImages(currentScroll, pointerSmoothCoords);
 
   // Update Background
-  updateBackground(currentScroll, pointerCoords);
+  updateBackground(currentScroll, pointerSmoothCoords);
 
   // Update Canvas
   requestAnimationFrame(update);

@@ -14,9 +14,14 @@
       href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist+Mono:wght@100..900&family=Teko:wght@300..700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist+Mono:wght@100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Teko:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles/app.scss" />
     <link rel="stylesheet" href="/styles/main-header.scss" />
     <link rel="stylesheet" href="/styles/burger-menu-content.scss" />
+    <link rel="stylesheet" href="/styles/about-us.scss" />
     <title>skitstudio</title>
   </head>
   <body>
@@ -33,10 +38,10 @@
         <img src="img/skit-logo.svg" alt="skit-logo" height="34" />
       </div>
       <div class="right-side">
-        <div class="about-us-btn">About Us</div>
-        <div class="contact-us-btn">Contact Us</div>
+        <div class="about-us-btn" id="aboutUsBtn">ABOUT US</div>
+        <div class="contact-us-btn">CONTACT US</div>
         <div class="burger-menu-btn" id="burgerMenuBtn">
-          <svg class="ham" viewBox="0 0 100 100" width="80" id="burgeMenuSvg">
+          <svg class="ham" viewBox="0 0 100 100" width="80" id="burgerMenuSvg">
             <path
               class="line top"
               d="m 70,33 h -40 c 0,0 -6,1.368796 -6,8.5 0,7.131204 6,8.5013 6,8.5013 l 20,-0.0013"
@@ -59,7 +64,7 @@
         </svg>
       </div>
       <div class="divider"></div>
-      <div class="about-us-btn">About Us</div>
+      <div class="about-us-btn">ABOUT US</div>
       <div class="social-btns">
         <div class="social-btn">
           <img src="img/linkedin.svg" alt="linked-in" />
@@ -70,14 +75,83 @@
       </div>
     </section>
 
-    <section class="mouse-ball">CLICK</section>
+    <section class="about-us-page blur" id="aboutUsPage">
+      <!-- TODO DELETE -->
+      <div class="test">SSSSSSSSSSSS</div>
+      <div class="blocks">
+        <div class="welcome block" id="welcomeBlock">
+          <div class="border-gradient"></div>
+          <div class="welcome-content">
+            <div class="welcome-text">WELCOME&nbsp;</div>
+            <div class="s-logo">
+              <img src="img/s-logo.svg" alt="s-logo" width="97" height="54" />
+            </div>
+            <div class="to-skit-studio">
+              <div>TO&nbsp;</div>
+              <div class="studio">SKIT STUDIO</div>
+            </div>
+            <div class="slogan">where technology meets imagination</div>
+          </div>
+          <div class="footer">
+            <div class="portfolio-btn">PORTFOLIO</div>
+            <div class="skills">
+              <div>[WebGL]</div>
+              <div>[Three.js]</div>
+              <div>[GSAP]</div>
+              <div>[Blender]</div>
+              <div>[Figma]</div>
+              <div>∞</div>
+            </div>
+          </div>
+        </div>
+        <div class="description block" id="descriptionBlock">
+          <div class="border-gradient"></div>
+          <div>
+            Are you looking to build a
+            <span class="highlight">3D website</span>? Specializing in 3D
+            websites, interactive landing pages, and immersive tools, we
+            leverage cutting-edge technologies like
+            <span class="highlight">WebGL, Three.js, and GSAP</span> to bring
+            your ideas to life. Our passion lies in crafting digital experiences
+            that not only captivate but also drive
+            <span class="highlight">business impact</span>.
+          </div>
+          <div>
+            Whether you’re looking to boost engagement, tell a compelling story,
+            or unlock new growth opportunities, SKIT has the tools and expertise
+            to <span class="highlight">create a 3D website</span> that stands
+            out. Additionally, we offer premium design services for
+            <span class="highlight">3D modeling</span> and
+            <span class="highlight">UI design</span>, ensuring your website is
+            not only visually impressive but also optimized to meet your
+            specific needs.
+          </div>
+          <div>
+            Our team’s commitment to
+            <span class="highlight">innovation and excellence</span> ensures
+            each project is tailored to your unique goals.
+          </div>
+          <div class="footer">
+            <div class="portfolio-btn">PORTFOLIO</div>
+            <div class="contact-us-btn">CONTACT US</div>
+            <div class="start-text">
+              [Start your journey in 3D website development]
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mouse-ball">
+      <img src="img/eye.svg" alt="eye" />
+    </section>
 
     <section class="app">
-      <div id="app" class="blur"/>
+      <div id="app" class="blur" />
     </section>
 
     <script type="module" src="./Canvas.js"></script>
     <script type="module" src="./utils/event-listeners"></script>
-    <script type="module" src="./utils/set-colors"></script>
+    <script type="module" src="./utils/css-updater"></script>
   </body>
 </html>
