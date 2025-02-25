@@ -107,11 +107,17 @@ getBackground(scene);
 // TODO FOR TEST Orbit Controls
 // const controls = new OrbitControls(camera, renderer.domElement);
 
+// Clock
+const clock = new THREE.Clock();
+
 function update() {
   // Stats
   // TODO delete Stats panel
   // stats.begin();
   // stats.end();
+
+  // TODO why only on S logo?
+  const deltaTime = clock.getDelta();
 
   // Update Burger Menu Springy Line
   updateSpringyLine();
@@ -142,7 +148,7 @@ function update() {
   updateImages(currentScroll, pointerSmoothCoords);
 
   // Update Background
-  updateBackground(currentScroll, pointerSmoothCoords);
+  updateBackground(currentScroll, pointerSmoothCoords, deltaTime);
 
   // Update Canvas
   requestAnimationFrame(update);

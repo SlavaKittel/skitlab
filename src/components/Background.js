@@ -1,23 +1,41 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
+import vertexShader from "./../shaders/vertexSLogo.glsl?raw";
+import fragmentShader from "./../shaders/fragmentSLogo.glsl?raw";
+
 // <<<< S-3D LOGO >>>>
 const loader = new GLTFLoader();
 let logoModelArray = [];
 let rotationSpeeds = [];
 const logoModelGroup = new THREE.Group();
 
-loader.load("/glb-models/main-logo-white.glb", (gltf) => {
-  const logoModel = gltf.scene;
+const customMaterial = new THREE.ShaderMaterial({
+  vertexShader,
+  fragmentShader,
+  uniforms: {
+    lightDirection1: { value: new THREE.Vector3(0, 0, 1).normalize() },
+    lightIntensity1: { value: 8.0 },
+    lightColor1: { value: new THREE.Color(0xffffff) },
+    lightDirection2: { value: new THREE.Vector3(0, 1, 0).normalize() },
+    lightIntensity2: { value: 5.0 },
+    lightColor2: { value: new THREE.Color(0xffffff) },
+    ambientColor: { value: new THREE.Color(0xffffff) },
+    ambientIntensity: { value: 0.2 },
+    metalness: { value: 1.0 },
+    roughness: { value: 0.4 },
+  },
+});
+
+loader.load("/glb-models/main-logo1.glb", ({ scene: model }) => {
+  const logoModel = model;
   logoModel.scale.set(0.15, 0.15, 0.15);
 
   logoModel.traverse((child) => {
     if (child.isMesh) {
-      child.material = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff,
-        metalness: 1.0,
-        roughness: 0.0,
-      });
+      if (child.material) {
+        child.material = customMaterial;
+      }
     }
   });
 
@@ -101,20 +119,21 @@ meshCylinder.position.z = 27;
 export function getBackground(scene) {
   // Cylinder background
   scene.add(meshCylinder);
-  // Cubes
+  // S-3D Logo
   scene.add(logoModelGroup);
 }
 
 export function updateBackground(yScrollPosition, pointerCoords, deltaTime) {
+  // Update Cylinder Bakcground
   const factorRotation = 0.01;
   meshCylinder.rotation.y = yScrollPosition * factorRotation;
   meshCylinder.position.x = -pointerCoords.x * 0.07;
   meshCylinder.position.y = -pointerCoords.y * 0.07;
 
-  // Update Cubes
+  // Update S-3D Logo
   logoModelGroup.rotation.y = yScrollPosition * 0.5;
-  logoModelGroup.position.x = -pointerCoords.x * 0.1;
-  logoModelGroup.position.y = -pointerCoords.y * 0.1;
+  logoModelGroup.position.x = -pointerCoords.x * 0.2;
+  logoModelGroup.position.y = -pointerCoords.y * 0.2;
 
   logoModelArray.forEach((logoModel, index) => {
     logoModel.rotation.y += rotationSpeeds[index] * deltaTime * 10;
