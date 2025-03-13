@@ -145,7 +145,7 @@ function update() {
   updateLights(currentScroll);
 
   // Update Images
-  updateImages(currentScroll, pointerSmoothCoords);
+  updateImages(currentScroll, pointerCoords);
 
   // Update Background
   updateBackground(currentScroll, pointerSmoothCoords, deltaTime);

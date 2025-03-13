@@ -16,20 +16,21 @@ const customMaterial = new THREE.ShaderMaterial({
   uniforms: {
     lightDirection1: { value: new THREE.Vector3(0, 0, 1).normalize() },
     lightIntensity1: { value: 8.0 },
-    lightColor1: { value: new THREE.Color(0xffffff) },
+    lightColor1: { value: new THREE.Color(0x797979) },
     lightDirection2: { value: new THREE.Vector3(0, 1, 0).normalize() },
     lightIntensity2: { value: 5.0 },
-    lightColor2: { value: new THREE.Color(0xffffff) },
-    ambientColor: { value: new THREE.Color(0xffffff) },
+    lightColor2: { value: new THREE.Color(0x797979) },
+    ambientColor: { value: new THREE.Color(0x797979) },
     ambientIntensity: { value: 0.2 },
     metalness: { value: 1.0 },
     roughness: { value: 0.4 },
   },
 });
 
-loader.load("/glb-models/main-logo1.glb", ({ scene: model }) => {
+loader.load("/glb-models/main-logo3.glb", ({ scene: model }) => {
   const logoModel = model;
-  logoModel.scale.set(0.15, 0.15, 0.15);
+  // TODO delete scale
+  // logoModel.scale.set(1, 1, 1);
 
   logoModel.traverse((child) => {
     if (child.isMesh) {
@@ -39,7 +40,7 @@ loader.load("/glb-models/main-logo1.glb", ({ scene: model }) => {
     }
   });
 
-  let count = 25;
+  let count = 5;
   for (let i = 0; i < count; i += 1) {
     const angle = Math.random() * Math.PI * 2;
     const radius = 8;

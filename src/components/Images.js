@@ -6,6 +6,7 @@ import { scrollYForEach } from "../utils/helped";
 // Props and variables
 let newImagesMesh = [];
 let newPlanesMesh = [];
+let newMousePlanesMesh = [];
 let imagesMeshIntersectIndex = null;
 let scene;
 let camera;
@@ -66,6 +67,19 @@ planes.forEach((plane, index) => {
   newPlanesMesh.push(planeMesh);
 });
 
+// Helped Mouse Planes
+const mousePlaneGroup = new THREE.Group();
+const mousePlanes = [{ color: "red" }, { color: "green" }, { color: "violet" }];
+mousePlanes.forEach((plane, index) => {
+  const planeMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(1, 1, 80, 80),
+    new THREE.MeshBasicMaterial({ color: plane.color, wireframe: true })
+  );
+  planeMesh.userData.index = index;
+  mousePlaneGroup.add(planeMesh);
+  newMousePlanesMesh.push(planeMesh);
+});
+
 // Links
 const urls = ["https://google.com", "https://example.com", "https://mail.com"];
 window.addEventListener("click", () => {
@@ -79,11 +93,11 @@ const raycaster = new THREE.Raycaster();
 function renderIntersects() {
   if (!planeGroup) return;
   raycaster.setFromCamera(pointerCoords, camera);
-  const intersectsImages = raycaster.intersectObjects(newImagesMesh);
-  const intersects = raycaster.intersectObjects([planeGroup]);
-  if (intersects.length) {
+  const intersectsImages = raycaster.intersectObjects(newMousePlanesMesh);
+  const intersectsHelpedPlanes = raycaster.intersectObjects([planeGroup]);
+  if (intersectsHelpedPlanes.length) {
     // Assignment prop index of the Helped Plane
-    indexOfImageArray = intersects.map((intersect) => {
+    indexOfImageArray = intersectsHelpedPlanes.map((intersect) => {
       const { index } = intersect.object.userData;
       const marker = markers[index];
       if (marker) {
@@ -122,7 +136,11 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
   scene.add(planeGroup);
   planeGroup.visible = false;
 
-  videoTextures.map((texture, index) => {
+  // Need for mouse click, avoid complex caluclation for raycast
+  scene.add(mousePlaneGroup);
+  mousePlaneGroup.visible = false;
+
+  videoTextures.forEach((texture, index) => {
     const planeGeometry = new THREE.PlaneGeometry(1, 1, 80, 80);
     const planeMaterial = new THREE.ShaderMaterial({
       extensions: {
@@ -130,7 +148,6 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
       },
       uniforms: {
         uTexture: { value: texture },
-        uYScrollPosition: { value: 0 },
         uAngle: { value: 0 },
         uProgress: { value: 0 },
         uMousePos: { value: new THREE.Vector3(-1, 1, 0) },
@@ -140,13 +157,14 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
       side: THREE.DoubleSide,
     });
     const mesh = new THREE.Mesh(planeGeometry, planeMaterial);
-    scene.add(mesh);
     mesh.userData.index = index;
+
+    scene.add(mesh);
     newImagesMesh.push(mesh);
-    return mesh;
   });
 }
 
+// Update function
 export function updateImages(currentScrollY, _pointerCoords) {
   pointerCoords = _pointerCoords;
   window.requestAnimationFrame(renderIntersects);
@@ -164,20 +182,46 @@ export function updateImages(currentScrollY, _pointerCoords) {
     planeMesh.position.y = -Math.pow(2.0, scrollY * 5 - 14) * 300;
   });
 
+  // Update Helped Planes for Mouse
+  newMousePlanesMesh.forEach((planeMesh, index) => {
+    const scrollY = scrollYForEach(index, currentScrollY);
+    const width = planeMesh.geometry.parameters.width;
+    const height = planeMesh.geometry.parameters.height;
+    let scaleY = 1;
+    let scaleX = 1;
+    const range = 1.14;
+    const normalizedValueY = 1 - -scrollY / range;
+    const normalizedValueX = 1 + -scrollY / range;
+
+    // Update scale based on scroll
+    if (scrollY < 0) scaleY = 1 - Math.pow(1 - normalizedValueY, 2.4);
+    if (scrollY < -range) scaleY = 0;
+    if (scrollY > 0) scaleX = 1 - Math.pow(1 - normalizedValueX, 2.5);
+    planeMesh.scale.y = scaleY;
+    planeMesh.scale.x = scaleX;
+
+    // Update rotation and position based on scroll
+    planeMesh.position.z =
+      -(Math.PI - Math.sqrt(Math.pow(scrollY, 2) + Math.pow(Math.PI, 2))) * 2;
+    planeMesh.rotation.z = Math.PI / 2;
+    planeMesh.rotation.y = -scrollY / 1.9;
+    planeMesh.position.x = scrollY - (1 - scaleY) * width * 0.5;
+    planeMesh.position.y =
+      -Math.pow(2.0, scrollY * 5 - 14) * 300 - (1 - scaleX) * height * 0.5;
+  });
+
   // Update Images
   newImagesMesh.forEach((imageMesh, index) => {
     const scrollY = scrollYForEach(index, currentScrollY);
 
-    // Update Markers position for each Image
+    // Update Mouse position or marker position
     if (indexOfImageArray.includes(index) && markers[index]) {
       imageMesh.material.uniforms.uMousePos.value.copy(
         markers[index].position.clone()
       );
     }
 
-    // Update Each Images
-    imageMesh.material.uniforms.uYScrollPosition.value = scrollY;
-    // Update the uniforms for Roll Up and Roll Down
+    // Adjust scroll-based parameters
     if (scrollY >= 0) {
       imageMesh.material.uniforms.uProgress.value = -scrollY + 1.2;
       imageMesh.material.uniforms.uAngle.value = 0;
@@ -187,7 +231,7 @@ export function updateImages(currentScrollY, _pointerCoords) {
       imageMesh.material.uniforms.uAngle.value = Math.PI / 2;
     }
 
-    // Update rotation and position based on scroll
+    // Update image mesh position based on scroll
     imageMesh.position.z =
       -(Math.PI - Math.sqrt(Math.pow(scrollY, 2) + Math.pow(Math.PI, 2))) * 2;
     imageMesh.rotation.z = Math.PI / 2;
