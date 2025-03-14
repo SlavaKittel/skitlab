@@ -27,19 +27,27 @@
   <body>
     <section class="main-header">
       <div class="social-btns">
-        <div class="social-btn">
+        <div
+          class="social-btn"
+          onclick="window.open('https://www.linkedin.com/company/s-k-it', '_blank')"
+        >
           <img src="img/linkedin.svg" alt="linked-in" />
         </div>
-        <div class="social-btn">
+        <div
+          class="social-btn"
+          onclick="window.open('https://linktr.ee/skitstudio', '_blank')"
+        >
           <img src="img/linktree.svg" alt="linktree" />
         </div>
       </div>
-      <div class="logo">
+      <div class="logo" onclick="window.location.href = '/'">
         <img src="img/skit-logo.svg" alt="skit-logo" height="34" />
       </div>
       <div class="right-side">
         <div class="about-us-btn" id="aboutUsBtn">ABOUT US</div>
-        <div class="contact-us-btn">CONTACT US</div>
+        <a href="mailto:hello@skitstudio.com" class="contact-us-btn"
+          >CONTACT US</a
+        >
         <div class="burger-menu-btn" id="burgerMenuBtn">
           <svg class="ham" viewBox="0 0 100 100" width="80" id="burgerMenuSvg">
             <path
@@ -93,7 +101,9 @@
             <div class="slogan">where technology meets imagination</div>
           </div>
           <div class="footer">
-            <div class="portfolio-btn">PORTFOLIO</div>
+            <div class="portfolio-btn">
+              PORTFOLIO
+            </div>
             <div class="skills">
               <div>[WebGL]</div>
               <div>[Three.js]</div>
@@ -133,7 +143,9 @@
           </div>
           <div class="footer">
             <div class="portfolio-btn">PORTFOLIO</div>
-            <div class="contact-us-btn">CONTACT US</div>
+            <a href="mailto:hello@skitstudio.com" class="contact-us-btn"
+              >CONTACT US</a
+            >
             <div class="start-text">
               [Start your journey in 3D website development]
             </div>

@@ -48,13 +48,12 @@ section.app {
 
 /* Mouse Ball */
 section.mouse-ball {
-  font-weight: 400;
   color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(5px);
-  z-index: 99;
+  backdrop-filter: blur(2px);
+  z-index: 5;
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -68,9 +67,16 @@ section.mouse-ball {
   /* TODO add mode? */
   /* mix-blend-mode: difference; */
   transition: width 0.1s ease-in-out, height 0.1s ease-in-out,
-    background 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    background 0.3s ease-in-out, color 0.3s ease-in-out,
+    opacity 0.3s ease-in-out, filter 0.3s ease-in-out;
   img {
     transition: opacity 0.3s ease-in-out;
   }
-
+  &.hovered {
+    width: 40px !important;
+    height: 40px !important;
+    mix-blend-mode: difference;
+    filter: invert(1);
+    border: 1px solid var(--bright);
+  }
 }

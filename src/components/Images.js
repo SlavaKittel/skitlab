@@ -2,6 +2,7 @@ import * as THREE from "three";
 import vertexShader from "./../shaders/vertex.glsl?raw";
 import fragmentShader from "./../shaders/fragment.glsl?raw";
 import { scrollYForEach } from "../utils/helped";
+import { state } from "../store/store";
 
 // Props and variables
 let newImagesMesh = [];
@@ -83,6 +84,7 @@ mousePlanes.forEach((plane, index) => {
 // Links
 const urls = ["https://google.com", "https://example.com", "https://mail.com"];
 window.addEventListener("click", () => {
+  if (state.isOpenAboutUs) return;
   if (imagesMeshIntersectIndex !== null && urls[imagesMeshIntersectIndex]) {
     window.open(urls[imagesMeshIntersectIndex], "_blank");
   }
@@ -110,7 +112,7 @@ function renderIntersects() {
       return index;
     });
   }
-  if (intersectsImages.length) {
+  if (intersectsImages.length && !state.isOpenAboutUs) {
     mouseBall.style.width = "55px";
     mouseBall.style.height = "55px";
     mouseBall.style.background = "unset";

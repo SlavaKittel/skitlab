@@ -16,6 +16,11 @@ const canvasApp = document.getElementById("app");
 const aboutUsPage = document.getElementById("aboutUsPage");
 const aboutUsBtns = document.querySelectorAll(".about-us-btn");
 const aboutUsBtn = document.getElementById("aboutUsBtn");
+const mouseBall = document.querySelector(".mouse-ball");
+const portfolioBtn = document.querySelectorAll(".portfolio-btn");
+const hoveredBtns = document.querySelectorAll(
+  ".contact-us-btn, .social-btn, .about-us-btn, .logo, .portfolio-btn"
+);
 
 function toggleBurgerMenu() {
   burgerMenuSvg.classList.toggle("active");
@@ -48,6 +53,13 @@ aboutUsBtns.forEach((btn) => {
   });
 });
 
+// Desktop Portofolio button
+portfolioBtn.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    toggleAboutUsState();
+  });
+});
+
 // Event Bus About Us and Burger Menu Toggle
 eventBus.addEventListener("aboutUsToggle", (event) => {
   if (event.detail) {
@@ -77,4 +89,14 @@ eventBus.addEventListener("menuToggle", (event) => {
     canvasApp.classList.remove("blur-active");
     aboutUsPage.classList.remove("blur-active");
   }
+});
+
+// Buttons mouse custom cursor pointer
+hoveredBtns.forEach((btn) => {
+  btn.addEventListener("mouseenter", () => {
+    mouseBall.classList.add("hovered");
+  });
+  btn.addEventListener("mouseleave", () => {
+    mouseBall.classList.remove("hovered");
+  });
 });

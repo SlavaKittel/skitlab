@@ -104,6 +104,7 @@ section.about-us-page {
         align-items: end;
         padding-top: 40px;
         .portfolio-btn {
+          z-index: 1;
           border: 1px solid var(--gray);
           border-radius: 6px;
           font-size: 20px;
@@ -160,6 +161,7 @@ section.about-us-page {
         align-items: end;
         padding-top: 20px;
         .contact-us-btn {
+          z-index: 1;
           font-weight: 500;
           background-color: var(--red);
           border-radius: 6px;
@@ -171,6 +173,8 @@ section.about-us-page {
           min-width: 137px;
           padding-top: 4px;
           box-sizing: border-box;
+          text-decoration: none;
+          color: var(--bright);
         }
         .portfolio-btn {
           display: none;
