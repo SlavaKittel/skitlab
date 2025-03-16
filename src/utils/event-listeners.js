@@ -17,14 +17,18 @@ const aboutUsPage = document.getElementById("aboutUsPage");
 const aboutUsBtns = document.querySelectorAll(".about-us-btn");
 const aboutUsBtn = document.getElementById("aboutUsBtn");
 const mouseBall = document.querySelector(".mouse-ball");
-const portfolioBtn = document.querySelectorAll(".portfolio-btn");
+const portfolioBtns = document.querySelectorAll(".portfolio-btn");
+const portfolioBtn = document.getElementById("portfolioBtn");
 const hoveredBtns = document.querySelectorAll(
   ".contact-us-btn, .social-btn, .about-us-btn, .logo, .portfolio-btn"
 );
+const contactUsBtns = document.querySelectorAll(".contact-us-btn");
+const linkedin = document.getElementById("linkedin");
+const linktree = document.getElementById("linktree");
+const mainLogo = document.getElementById("mainLogo");
 
 function toggleBurgerMenu() {
   burgerMenuSvg.classList.toggle("active");
-  burgerMenuContent.classList.toggle("active");
 }
 
 window.addEventListener("resize", () => {
@@ -54,7 +58,7 @@ aboutUsBtns.forEach((btn) => {
 });
 
 // Desktop Portofolio button
-portfolioBtn.forEach((btn) => {
+portfolioBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     toggleAboutUsState();
   });
@@ -80,14 +84,23 @@ eventBus.addEventListener("aboutUsToggle", (event) => {
     }, 300);
   }
 });
-// TODO delete from DOM burgerMenuContent??
 eventBus.addEventListener("menuToggle", (event) => {
   if (event.detail) {
     canvasApp.classList.add("blur-active");
     aboutUsPage.classList.add("blur-active");
+    document.body.appendChild(burgerMenuContent);
+    requestAnimationFrame(() => {
+      burgerMenuContent.classList.add("active");
+    });
   } else {
     canvasApp.classList.remove("blur-active");
     aboutUsPage.classList.remove("blur-active");
+    burgerMenuContent.classList.remove("active");
+    setTimeout(() => {
+      if (burgerMenuContent.parentNode && !burgerMenuContent.classList.contains("active")) {
+        burgerMenuContent.parentNode.removeChild(burgerMenuContent);
+      }
+    }, 2000);
   }
 });
 
@@ -99,4 +112,42 @@ hoveredBtns.forEach((btn) => {
   btn.addEventListener("mouseleave", () => {
     mouseBall.classList.remove("hovered");
   });
+});
+
+// Hovered buttons
+function socialBtnHovered(e) {
+  e.addEventListener("mouseenter", () => {
+    e.style.background = "var(--red)";
+    e.style.border = "1px solid var(--red)";
+  });
+  e.addEventListener("mouseleave", () => {
+    e.style.background = "unset";
+    e.style.border = "1px solid var(--gray)";
+  });
+}
+socialBtnHovered(linkedin);
+socialBtnHovered(linktree);
+socialBtnHovered(portfolioBtn);
+
+aboutUsBtn.addEventListener("mouseenter", () => {
+  aboutUsBtn.style.color = "var(--redHover)";
+});
+aboutUsBtn.addEventListener("mouseleave", () => {
+  aboutUsBtn.style.color = "var(--bright)";
+});
+
+contactUsBtns.forEach((btn) => {
+  btn.addEventListener("mouseenter", () => {
+    btn.style.background = "var(--redHover)";
+  });
+  btn.addEventListener("mouseleave", () => {
+    btn.style.background = "var(--red)";
+  });
+});
+
+mainLogo.addEventListener("mouseenter", () => {
+  mainLogo.src = 'img/skit-logo-red.svg';
+});
+mainLogo.addEventListener("mouseleave", () => {
+  mainLogo.src = 'img/skit-logo.svg';
 });

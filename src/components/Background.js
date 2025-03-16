@@ -86,10 +86,10 @@ const roughnessTexture = nameBoundaryTexture(
 const aoTexture = nameBoundaryTexture("TilesMosaicPennyround001_AO_1K");
 
 const repeatGorundTextures = (texture) => {
-  const repeat = 1.5;
+  const repeat = 3;
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.x = repeat * 37;
+  texture.repeat.x = repeat * 18.5;
   texture.repeat.y = repeat;
 };
 repeatGorundTextures(colorTexture);
@@ -100,7 +100,7 @@ repeatGorundTextures(aoTexture);
 repeatGorundTextures(bumpTexture);
 
 // Mesh Cylinder Geometry
-const geometry = new THREE.CylinderGeometry(30, 30, 5, 100, 100);
+const geometry = new THREE.CylinderGeometry(30, 30, 10, 100, 100);
 const material = new THREE.MeshStandardMaterial({
   metalness: 0.5,
   roughness: 0.5,

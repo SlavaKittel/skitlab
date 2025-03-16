@@ -34,6 +34,10 @@ let speedMouse = 0.3;
 let speedSmoothMouse = 0.04;
 const easeCoeff = 0.001;
 
+const aspectRatioMobileCoef = 0.66;
+const cameraDistanceFactor = 6;
+const startPositionZ = 2;
+
 // Pointermove listener
 window.addEventListener("pointermove", (event) => {
   mouseX = event.clientX;
@@ -75,11 +79,24 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.z = 2;
+camera.position.z = startPositionZ;
+if (window.innerWidth / window.innerHeight < aspectRatioMobileCoef) {
+  console.log(window.innerWidth / window.innerHeight);
+  camera.position.z =
+    startPositionZ -
+    (window.innerWidth / window.innerHeight) * cameraDistanceFactor +
+    aspectRatioMobileCoef * cameraDistanceFactor;
+}
 scene.background = new THREE.Color(0x87ceeb);
 
 // Resize
 window.addEventListener("resize", () => {
+  if (window.innerWidth / window.innerHeight < aspectRatioMobileCoef) {
+    camera.position.z =
+      startPositionZ -
+      (window.innerWidth / window.innerHeight) * cameraDistanceFactor +
+      aspectRatioMobileCoef * cameraDistanceFactor;
+  }
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
