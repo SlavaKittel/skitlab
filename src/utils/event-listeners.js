@@ -5,10 +5,12 @@ import {
   state,
 } from "../store/store";
 
+import { isMobile, calculateAndSetAngle } from "./helped";
+
 import { breakpoints } from "./mixin";
 
 // Constants
-let isMobile = window.innerWidth < breakpoints.tablet;
+let isMobileTablet = window.innerWidth < breakpoints.tablet;
 const burgerMenuBtn = document.getElementById("burgerMenuBtn");
 const burgerMenuSvg = document.getElementById("burgerMenuSvg");
 const burgerMenuContent = document.getElementById("burgerMenuContent");
@@ -19,6 +21,9 @@ const aboutUsBtn = document.getElementById("aboutUsBtn");
 const mouseBall = document.querySelector(".mouse-ball");
 const portfolioBtns = document.querySelectorAll(".portfolio-btn");
 const portfolioBtn = document.getElementById("portfolioBtn");
+const portfolioBtnSpecial = document.getElementById("portfolioBtnSpecial");
+const welcomeBlock = document.getElementById("welcomeBlock");
+const descriptionBlock = document.getElementById("descriptionBlock");
 const hoveredBtns = document.querySelectorAll(
   ".contact-us-btn, .social-btn, .about-us-btn, .logo, .portfolio-btn"
 );
@@ -32,7 +37,7 @@ function toggleBurgerMenu() {
 }
 
 window.addEventListener("resize", () => {
-  isMobile = window.innerWidth < breakpoints.tablet;
+  isMobileTablet = window.innerWidth < breakpoints.tablet;
 });
 
 // Burger Menu State
@@ -44,11 +49,11 @@ burgerMenuBtn.addEventListener("click", () => {
 // About Us State
 aboutUsBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
-    if (!state.isOpenAboutUs && isMobile) {
+    if (!state.isOpenAboutUs && isMobileTablet) {
       toggleAboutUsState();
       toggleMenuState();
       toggleBurgerMenu();
-    } else if (state.isOpenAboutUs && isMobile) {
+    } else if (state.isOpenAboutUs && isMobileTablet) {
       toggleMenuState();
       toggleBurgerMenu();
     } else {
@@ -57,11 +62,18 @@ aboutUsBtns.forEach((btn) => {
   });
 });
 
-// Desktop Portofolio button
+// Portofolio button toggle
 portfolioBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     toggleAboutUsState();
   });
+});
+
+// Portofolio button specail toggle
+portfolioBtnSpecial.addEventListener("click", () => {
+  toggleMenuState();
+  toggleBurgerMenu();
+  toggleAboutUsState({ forceClose: true });
 });
 
 // Event Bus About Us and Burger Menu Toggle
@@ -72,6 +84,8 @@ eventBus.addEventListener("aboutUsToggle", (event) => {
     document.body.appendChild(aboutUsPage);
     requestAnimationFrame(() => {
       aboutUsPage.classList.add("active"); // Trigger the animation!! (best solution)
+      calculateAndSetAngle(welcomeBlock, "--welcomeAngle");
+      calculateAndSetAngle(descriptionBlock, "--descriptionAngle");
     });
   } else {
     aboutUsPage.classList.remove("active");
@@ -84,10 +98,12 @@ eventBus.addEventListener("aboutUsToggle", (event) => {
     }, 300);
   }
 });
+burgerMenuContent.parentNode.removeChild(burgerMenuContent);
 eventBus.addEventListener("menuToggle", (event) => {
   if (event.detail) {
     canvasApp.classList.add("blur-active");
     aboutUsPage.classList.add("blur-active");
+    aboutUsPage.style.pointerEvents = "none";
     document.body.appendChild(burgerMenuContent);
     requestAnimationFrame(() => {
       burgerMenuContent.classList.add("active");
@@ -95,9 +111,13 @@ eventBus.addEventListener("menuToggle", (event) => {
   } else {
     canvasApp.classList.remove("blur-active");
     aboutUsPage.classList.remove("blur-active");
+    aboutUsPage.style.pointerEvents = "all";
     burgerMenuContent.classList.remove("active");
     setTimeout(() => {
-      if (burgerMenuContent.parentNode && !burgerMenuContent.classList.contains("active")) {
+      if (
+        burgerMenuContent.parentNode &&
+        !burgerMenuContent.classList.contains("active")
+      ) {
         burgerMenuContent.parentNode.removeChild(burgerMenuContent);
       }
     }, 2000);
@@ -115,39 +135,48 @@ hoveredBtns.forEach((btn) => {
 });
 
 // Hovered buttons
-function socialBtnHovered(e) {
-  e.addEventListener("mouseenter", () => {
-    e.style.background = "var(--red)";
-    e.style.border = "1px solid var(--red)";
+if (!isMobile()) {
+  function socialBtnHovered(e) {
+    e.addEventListener("mouseenter", () => {
+      e.style.background = "var(--red)";
+      e.style.border = "1px solid var(--red)";
+    });
+    e.addEventListener("mouseleave", () => {
+      e.style.background = "unset";
+      e.style.border = "1px solid var(--gray)";
+    });
+  }
+  socialBtnHovered(linkedin);
+  socialBtnHovered(linktree);
+  socialBtnHovered(portfolioBtn);
+
+  aboutUsBtn.addEventListener("mouseenter", () => {
+    aboutUsBtn.style.color = "var(--redHover)";
   });
-  e.addEventListener("mouseleave", () => {
-    e.style.background = "unset";
-    e.style.border = "1px solid var(--gray)";
+  aboutUsBtn.addEventListener("mouseleave", () => {
+    aboutUsBtn.style.color = "var(--bright)";
+  });
+
+  contactUsBtns.forEach((btn) => {
+    btn.addEventListener("mouseenter", () => {
+      btn.style.background = "var(--redHover)";
+    });
+    btn.addEventListener("mouseleave", () => {
+      btn.style.background = "var(--red)";
+    });
+  });
+
+  mainLogo.addEventListener("mouseenter", () => {
+    mainLogo.src = "img/skit-logo-red.svg";
+  });
+  mainLogo.addEventListener("mouseleave", () => {
+    mainLogo.src = "img/skit-logo.svg";
   });
 }
-socialBtnHovered(linkedin);
-socialBtnHovered(linktree);
-socialBtnHovered(portfolioBtn);
 
-aboutUsBtn.addEventListener("mouseenter", () => {
-  aboutUsBtn.style.color = "var(--redHover)";
-});
-aboutUsBtn.addEventListener("mouseleave", () => {
-  aboutUsBtn.style.color = "var(--bright)";
-});
-
-contactUsBtns.forEach((btn) => {
-  btn.addEventListener("mouseenter", () => {
-    btn.style.background = "var(--redHover)";
-  });
-  btn.addEventListener("mouseleave", () => {
-    btn.style.background = "var(--red)";
-  });
-});
-
-mainLogo.addEventListener("mouseenter", () => {
-  mainLogo.src = 'img/skit-logo-red.svg';
-});
-mainLogo.addEventListener("mouseleave", () => {
-  mainLogo.src = 'img/skit-logo.svg';
-});
+// Mouse Ball hide on mobile
+document.body.appendChild(mouseBall);
+if (isMobile()) {
+  mouseBall.parentNode.removeChild(mouseBall);
+  mouseBall.style.display = "none";
+}

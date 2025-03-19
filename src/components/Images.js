@@ -3,6 +3,7 @@ import vertexShader from "./../shaders/vertex.glsl?raw";
 import fragmentShader from "./../shaders/fragment.glsl?raw";
 import { scrollYForEach } from "../utils/helped";
 import { state } from "../store/store";
+import { isMobile } from "../utils/helped";
 
 // Props and variables
 let newImagesMesh = [];
@@ -112,13 +113,13 @@ function renderIntersects() {
       return index;
     });
   }
-  if (intersectsImages.length && !state.isOpenAboutUs) {
+  if (intersectsImages.length && !state.isOpenAboutUs && !isMobile()) {
     mouseBall.style.width = "55px";
     mouseBall.style.height = "55px";
     mouseBall.style.background = "unset";
     mouseBall.querySelector("img").style.opacity = 1;
     imagesMeshIntersectIndex = intersectsImages[0].object.userData.index;
-  } else if (!intersectsImages.length) {
+  } else if (!intersectsImages.length && !isMobile()) {
     mouseBall.style.width = "20px";
     mouseBall.style.height = "20px";
     mouseBall.style.background = "#ffffff3e";

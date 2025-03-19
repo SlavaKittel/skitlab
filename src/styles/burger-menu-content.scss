@@ -3,10 +3,10 @@ section.burger-menu-content {
   flex-direction: column;
   align-items: center;
   position: fixed;
-  top: -251px;
+  top: -345px;
   transition: top 0.3s ease-in-out;
   width: 100%;
-  height: 250px;
+  height: 350px;
   z-index: 2;
   .divider {
     width: 100%;
@@ -14,6 +14,21 @@ section.burger-menu-content {
     background-color: var(--dark);
     margin-top: -430px;
     z-index: 1;
+  }
+  .portfolio-btn-specail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% - 40px);
+    min-height: 40px;
+    color: var(--bright);
+    border-radius: 6px;
+    border: 1px solid var(--gray);
+    margin-top: 65px;
+    z-index: 1;
+    padding-top: 4px;
+    box-sizing: border-box;
+    text-transform: uppercase;
   }
   .about-us-btn {
     display: flex;
@@ -24,7 +39,7 @@ section.burger-menu-content {
     color: var(--bright);
     border-radius: 6px;
     border: 1px solid var(--gray);
-    margin-top: 20px;
+    margin-top: 10px;
     z-index: 1;
     padding-top: 4px;
     box-sizing: border-box;
@@ -34,6 +49,7 @@ section.burger-menu-content {
     display: flex;
     gap: 10px;
     margin-top: 10px;
+    margin-bottom: 65px;
     z-index: 1;
     .social-btn {
       display: flex;

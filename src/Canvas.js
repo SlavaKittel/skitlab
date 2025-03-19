@@ -35,7 +35,7 @@ let speedSmoothMouse = 0.04;
 const easeCoeff = 0.001;
 
 const aspectRatioMobileCoef = 0.66;
-const cameraDistanceFactor = 6;
+const cameraDistanceFactor = 4;
 const startPositionZ = 2;
 
 // Pointermove listener
@@ -45,7 +45,7 @@ window.addEventListener("pointermove", (event) => {
 });
 
 // Scroll Y wheel and touch
-let wheelScroll = 0.63;
+let scroll = 0.63;
 let currentScroll = 0;
 window.addEventListener("wheel", (event) => {
   if (state.isOpenMenu) return;
@@ -53,22 +53,50 @@ window.addEventListener("wheel", (event) => {
     Math.sign(event.deltaY) * Math.min(Math.abs(event.deltaY), 1000);
   const deltaX =
     Math.sign(event.deltaX) * Math.min(Math.abs(event.deltaX), 1000);
-  wheelScroll += deltaY * 0.001;
-  wheelScroll += deltaX * 0.001;
+  scroll += deltaY * 0.001;
+  scroll += deltaX * 0.001;
 });
 
 let toushScrollY = 0;
-// TODO need to add performance.now() for all listeners; Add also for X and Y
+let toushScrollX = 0;
+let touchDeltaY = 0;
+let touchDeltaX = 0;
+let isTouching = false;
+let inertiaTimer;
+
+function getApplyInertia() {
+  if (isTouching) return;
+  if (Math.abs(touchDeltaY) >= 0.1) {
+    scroll -= touchDeltaY * 0.005;
+    touchDeltaY *= 0.95;
+  }
+  if (Math.abs(touchDeltaX) >= 0.1) {
+    scroll -= touchDeltaX * 0.005;
+    touchDeltaX *= 0.95;
+  }
+  inertiaTimer = requestAnimationFrame(getApplyInertia);
+}
 window.addEventListener("touchstart", (event) => {
   if (state.isOpenMenu) return;
+  isTouching = true;
+  toushScrollX = event.touches[0].clientX;
   toushScrollY = event.touches[0].clientY;
+  cancelAnimationFrame(inertiaTimer);
 });
 window.addEventListener("touchmove", (event) => {
   if (state.isOpenMenu) return;
   const touchCurrentY = event.touches[0].clientY;
-  const touchDelta = touchCurrentY - toushScrollY;
-  wheelScroll -= touchDelta * 0.005;
+  const touchCurrentX = event.touches[0].clientX;
+  touchDeltaX = touchCurrentX - toushScrollX;
+  touchDeltaY = touchCurrentY - toushScrollY;
+  scroll -= touchDeltaY * 0.003;
+  scroll -= touchDeltaX * 0.003;
+  toushScrollX = touchCurrentX;
   toushScrollY = touchCurrentY;
+});
+window.addEventListener("touchend", () => {
+  isTouching = false;
+  getApplyInertia();
 });
 
 // Scene and Camera
@@ -81,7 +109,6 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.z = startPositionZ;
 if (window.innerWidth / window.innerHeight < aspectRatioMobileCoef) {
-  console.log(window.innerWidth / window.innerHeight);
   camera.position.z =
     startPositionZ -
     (window.innerWidth / window.innerHeight) * cameraDistanceFactor +
@@ -140,7 +167,7 @@ function update() {
   updateSpringyLine();
 
   // Update Scroll
-  currentScroll += (wheelScroll - currentScroll) * easeOutCirc(easeCoeff);
+  currentScroll += (scroll - currentScroll) * easeOutCirc(easeCoeff);
 
   // Update Pointer and MouseBall
   let distX = mouseX - ballX;

@@ -12,18 +12,17 @@
     "@types/three": "^0.167.2",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
-    "@vitejs/plugin-react": "3.0",
+    "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^8.48.0",
     "eslint-plugin-react": "^7.33.2",
     "sass": "^1.83.4",
     "typescript": "^5.1.6",
-    "vite": "^4.0.4"
+    "vite": "^6.2.2"
   },
   "dependencies": {
     "gsap": "^3.12.7",
     "stats.js": "^0.17.0",
-    "three": "^0.171.0",
-    "virtual-scroll": "^2.2.1"
+    "three": "^0.171.0"
   },
   "browserify": {
     "transform": [

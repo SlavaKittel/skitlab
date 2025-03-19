@@ -1,6 +1,5 @@
 html,
 body {
-  cursor: url("s-logo.svg");
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -64,8 +63,7 @@ section.mouse-ball {
   transform: translate(-50%, -50%);
   will-change: transform;
   border: 1px solid var(--bright);
-  /* TODO add mode? */
-  /* mix-blend-mode: difference; */
+  mix-blend-mode: difference;
   transition: width 0.1s ease-in-out, height 0.1s ease-in-out,
     background 0.3s ease-in-out, color 0.3s ease-in-out,
     opacity 0.3s ease-in-out, filter 0.3s ease-in-out;

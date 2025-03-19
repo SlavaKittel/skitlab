@@ -10,6 +10,8 @@ import {
   breakpoints,
 } from "./mixin.js";
 
+import { calculateAndSetAngle } from "./helped.js";
+
 const themeColors = {
   bright,
   grayBright,
@@ -27,19 +29,10 @@ Object.entries(themeColors).forEach(([key, value]) => {
 const welcomeBlock = document.getElementById("welcomeBlock");
 const descriptionBlock = document.getElementById("descriptionBlock");
 const aboutUsBtns = document.querySelectorAll(".about-us-btn");
-function calculateAndSetAngle(element, propertyName) {
-  if (!element) return;
-  const rect = element.getBoundingClientRect();
-  const angleInRadians = Math.atan2(rect.height, rect.width);
-  const angleInDegrees = angleInRadians * (180 / Math.PI);
-  const flippedAngleInDegrees = 180 - angleInDegrees;
-  document.documentElement.style.setProperty(
-    propertyName,
-    `${flippedAngleInDegrees}deg`
-  );
-}
+
 if (welcomeBlock) calculateAndSetAngle(welcomeBlock, "--welcomeAngle");
-if (descriptionBlock) calculateAndSetAngle(descriptionBlock, "--descriptionAngle");
+if (descriptionBlock)
+  calculateAndSetAngle(descriptionBlock, "--descriptionAngle");
 aboutUsBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     calculateAndSetAngle(welcomeBlock, "--welcomeAngle");
@@ -48,7 +41,8 @@ aboutUsBtns.forEach((btn) => {
 });
 window.addEventListener("resize", () => {
   if (welcomeBlock) calculateAndSetAngle(welcomeBlock, "--welcomeAngle");
-  if (descriptionBlock) calculateAndSetAngle(descriptionBlock, "--descriptionAngle");
+  if (descriptionBlock)
+    calculateAndSetAngle(descriptionBlock, "--descriptionAngle");
 });
 
 const applyResponsiveClasses = () => {

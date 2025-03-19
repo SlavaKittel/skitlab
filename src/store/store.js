@@ -11,7 +11,7 @@ export function toggleMenuState() {
   state.isOpenMenu = !state.isOpenMenu;
   eventBus.dispatchEvent(new CustomEvent("menuToggle", { detail: state.isOpenMenu }));
 }
-export function toggleAboutUsState() {
-  state.isOpenAboutUs = !state.isOpenAboutUs;
+export function toggleAboutUsState({ forceClose = false} = {}) {
+  state.isOpenAboutUs = forceClose ? false : !state.isOpenAboutUs;
   eventBus.dispatchEvent(new CustomEvent("aboutUsToggle", { detail: state.isOpenAboutUs }));
 }
