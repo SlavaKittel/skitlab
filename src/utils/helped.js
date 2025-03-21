@@ -31,3 +31,14 @@ export function calculateAndSetAngle(element, propertyName) {
     `${flippedAngleInDegrees}deg`
   );
 }
+
+export function getAppearFooterText(
+  scroll,
+  interval = 3.76 / 3,
+  range = 0.25,
+  offset = 0.6
+) {
+  const adjustedValue = scroll - offset;
+  const mod = ((adjustedValue % interval) + interval) % interval;
+  return mod < range || mod > interval - range;
+}

@@ -3,8 +3,8 @@ import { getLights, updateLights } from "./components/Lights";
 import { getImages, updateImages } from "./components/Images";
 import { updateSpringyLine } from "./utils/springy-line";
 import { getBackground, updateBackground } from "./components/Background";
-import { easeOutCirc } from "./utils/helped";
-import { state } from "./store/store";
+import { easeOutCirc, getAppearFooterText } from "./utils/helped";
+import { state, hasTouched } from "./store/store";
 // TODO for test
 // import Stats from "stats.js";
 
@@ -23,7 +23,10 @@ const height = window.innerHeight;
 
 const pointerCoords = new THREE.Vector2();
 const pointerSmoothCoords = new THREE.Vector2();
+
 const mouseBall = document.querySelector(".mouse-ball");
+const textClick = document.getElementById("textClick");
+
 let mouseX = 0;
 let mouseY = 0;
 let ballX = 0;
@@ -67,12 +70,12 @@ let inertiaTimer;
 function getApplyInertia() {
   if (isTouching) return;
   if (Math.abs(touchDeltaY) >= 0.1) {
-    scroll -= touchDeltaY * 0.005;
-    touchDeltaY *= 0.95;
+    scroll -= touchDeltaY * 0.003;
+    touchDeltaY *= 0.93;
   }
   if (Math.abs(touchDeltaX) >= 0.1) {
-    scroll -= touchDeltaX * 0.005;
-    touchDeltaX *= 0.95;
+    scroll -= touchDeltaX * 0.003;
+    touchDeltaX *= 0.93;
   }
   inertiaTimer = requestAnimationFrame(getApplyInertia);
 }
@@ -187,6 +190,13 @@ function update() {
 
   // Update Lights
   updateLights(currentScroll);
+
+  // Update Mobile Footer Text
+  getAppearFooterText(currentScroll);
+  textClick.style.opacity = 0;
+  if (getAppearFooterText(currentScroll) && hasTouched) {
+    textClick.style.opacity = 1;
+  }
 
   // Update Images
   updateImages(currentScroll, pointerCoords);

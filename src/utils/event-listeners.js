@@ -3,6 +3,7 @@ import {
   toggleAboutUsState,
   toggleMenuState,
   state,
+  setHasTouched,
 } from "../store/store";
 
 import { isMobile, calculateAndSetAngle } from "./helped";
@@ -31,6 +32,8 @@ const contactUsBtns = document.querySelectorAll(".contact-us-btn");
 const linkedin = document.getElementById("linkedin");
 const linktree = document.getElementById("linktree");
 const mainLogo = document.getElementById("mainLogo");
+const textScroll = document.getElementById("textScroll");
+const textClick = document.getElementById("textClick");
 
 function toggleBurgerMenu() {
   burgerMenuSvg.classList.toggle("active");
@@ -179,4 +182,16 @@ document.body.appendChild(mouseBall);
 if (isMobile()) {
   mouseBall.parentNode.removeChild(mouseBall);
   mouseBall.style.display = "none";
+}
+
+// Footer mobile text
+if (isMobile()) {
+  textScroll.style.opacity = 1;
+  window.addEventListener("touchmove", () => {
+    textScroll.style.opacity = 0;
+    setHasTouched(true);
+  });
+} else {
+  textScroll.style.display = "none";
+  textClick.style.display = "none";
 }

@@ -15,3 +15,10 @@ export function toggleAboutUsState({ forceClose = false} = {}) {
   state.isOpenAboutUs = forceClose ? false : !state.isOpenAboutUs;
   eventBus.dispatchEvent(new CustomEvent("aboutUsToggle", { detail: state.isOpenAboutUs }));
 }
+
+
+// hasTouch
+export let hasTouched = false;
+export function setHasTouched(value) {
+  hasTouched = value;
+}
