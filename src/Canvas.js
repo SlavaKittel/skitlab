@@ -41,10 +41,22 @@ const aspectRatioMobileCoef = 0.66;
 const cameraDistanceFactor = 4;
 const startPositionZ = 2;
 
-// Pointermove listener
+// Pointermove and Touch main listener
 window.addEventListener("pointermove", (event) => {
   mouseX = event.clientX;
   mouseY = event.clientY;
+});
+window.addEventListener("touchstart", (event) => {
+  const touch = event.touches[0];
+  mouseX = touch.clientX;
+  mouseY = touch.clientY;
+  ballX = mouseX;
+  ballY = mouseY;
+});
+window.addEventListener("touchmove", (event) => {
+  const touch = event.touches[0];
+  mouseX = touch.clientX;
+  mouseY = touch.clientY;
 });
 
 // Scroll Y wheel and touch
@@ -175,14 +187,14 @@ function update() {
   // Update Pointer and MouseBall
   let distX = mouseX - ballX;
   let distY = mouseY - ballY;
-  let distSmoothX = mouseX - ballSmoothX;
-  let distSmoothY = mouseY - ballSmoothY;
   ballX += distX * speedMouse;
   ballY += distY * speedMouse;
-  ballSmoothX += distSmoothX * speedSmoothMouse;
-  ballSmoothY += distSmoothY * speedSmoothMouse;
   pointerCoords.x = (ballX / window.innerWidth) * 2 - 1;
   pointerCoords.y = -(ballY / window.innerHeight) * 2 + 1;
+  let distSmoothX = mouseX - ballSmoothX;
+  let distSmoothY = mouseY - ballSmoothY;
+  ballSmoothX += distSmoothX * speedSmoothMouse;
+  ballSmoothY += distSmoothY * speedSmoothMouse;
   pointerSmoothCoords.x = (ballSmoothX / window.innerWidth) * 2 - 1;
   pointerSmoothCoords.y = -(ballSmoothY / window.innerHeight) * 2 + 1;
   mouseBall.style.left = ballX + "px";

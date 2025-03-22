@@ -106,6 +106,8 @@ eventBus.addEventListener("menuToggle", (event) => {
   if (event.detail) {
     canvasApp.classList.add("blur-active");
     aboutUsPage.classList.add("blur-active");
+    textScroll.classList.add("blur-active");
+    textClick.classList.add("blur-active");
     aboutUsPage.style.pointerEvents = "none";
     document.body.appendChild(burgerMenuContent);
     requestAnimationFrame(() => {
@@ -114,6 +116,8 @@ eventBus.addEventListener("menuToggle", (event) => {
   } else {
     canvasApp.classList.remove("blur-active");
     aboutUsPage.classList.remove("blur-active");
+    textScroll.classList.remove("blur-active");
+    textClick.classList.remove("blur-active");
     aboutUsPage.style.pointerEvents = "all";
     burgerMenuContent.classList.remove("active");
     setTimeout(() => {

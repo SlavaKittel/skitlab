@@ -2,6 +2,7 @@
 uniform float uAngle;
 uniform float uProgress;
 uniform vec3 uMousePos;
+uniform bool uIsMobile;
 
 varying vec2 vUv;
 varying float vFrontShadow;
@@ -62,10 +63,13 @@ void main() {
   float sizaBell = 0.25;
   float correctionValueX = 0.1;
   float correctionValueY = 0.2;
-  modelPosition.z += 
-  (1. / (1. + exp(-k * ((finalposition.x - uMousePos.y + correctionValueY ) - 0.))) - 1. / (1. + exp(-k * ((finalposition.x - uMousePos.y + correctionValueY ) - sizaBell))))
-  *
-  (1. / (1. + exp(-k * ((finalposition.y + uMousePos.x + correctionValueX) - 0.))) - 1. / (1. + exp(-k * ((finalposition.y + uMousePos.x + correctionValueX) - sizaBell))));
+
+  if (!uIsMobile) {
+    modelPosition.z += 
+    (1. / (1. + exp(-k * ((finalposition.x - uMousePos.y + correctionValueY ) - 0.))) - 1. / (1. + exp(-k * ((finalposition.x - uMousePos.y + correctionValueY ) - sizaBell))))
+    *
+    (1. / (1. + exp(-k * ((finalposition.y + uMousePos.x + correctionValueX) - 0.))) - 1. / (1. + exp(-k * ((finalposition.y + uMousePos.x + correctionValueX) - sizaBell))));
+  }
 
   // Calculate the final vertex position in clip space
   gl_Position = projectionMatrix * viewMatrix * modelPosition;

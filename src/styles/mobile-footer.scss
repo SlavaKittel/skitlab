@@ -5,24 +5,17 @@ section.mobile-footer {
   text-transform: uppercase;
   color: var(--gray);
   width: 100%;
-  .text-scroll {
+  .footer-text {
     display: flex;
     position: absolute;
     z-index: 1;
     bottom: 12px;
     align-items: center;
-    transition: opacity 0.3s ease-in-out;
-    img {
-      margin: 0 2px 4px 6px;
+    transition: filter 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    filter: unset;
+    &.blur-active {
+      filter: blur(10px);
     }
-  }
-  .text-click {
-    display: flex;
-    position: absolute;
-    z-index: 1;
-    bottom: 12px;
-    align-items: center;
-    transition: opacity 0.3s ease-in-out;
     img {
       margin: 0 0 4px 6px;
     }

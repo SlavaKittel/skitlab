@@ -113,13 +113,13 @@ function renderIntersects() {
       return index;
     });
   }
-  if (intersectsImages.length && !state.isOpenAboutUs && !isMobile()) {
+  if (intersectsImages.length && !state.isOpenMenu && !state.isOpenAboutUs) {
     mouseBall.style.width = "55px";
     mouseBall.style.height = "55px";
     mouseBall.style.background = "unset";
     mouseBall.querySelector("img").style.opacity = 1;
     imagesMeshIntersectIndex = intersectsImages[0].object.userData.index;
-  } else if (!intersectsImages.length && !isMobile()) {
+  } else if (!intersectsImages.length) {
     mouseBall.style.width = "20px";
     mouseBall.style.height = "20px";
     mouseBall.style.background = "#ffffff3e";
@@ -154,6 +154,7 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
         uAngle: { value: 0 },
         uProgress: { value: 0 },
         uMousePos: { value: new THREE.Vector3(-1, 1, 0) },
+        uIsMobile: { value: isMobile() },
       },
       vertexShader: vertexShader,
       fragmentShader: fragmentShader,
