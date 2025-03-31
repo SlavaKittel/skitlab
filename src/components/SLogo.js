@@ -84,7 +84,7 @@ function renderSLogoCanvas(container) {
 
     if (logoModel) {
       targetRoll = roll * 0.01;
-      targetPitch = pitch * 0.01;
+      targetPitch = pitch * 0.01 - 50;
     }
   }
   if (window.DeviceOrientationEvent && window.DeviceMotionEvent) {
