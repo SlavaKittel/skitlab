@@ -72,6 +72,8 @@ function renderSLogoCanvas(container) {
   // TODO check
   let rollValue = 0;
   let pitchValue = 0;
+  let targetRoll = 0;
+  let targetPitch = 0;
   const easeCoeff = 0.001;
   function handleOrientation(event) {
     const roll = event.gamma;
@@ -113,6 +115,8 @@ function renderSLogoCanvas(container) {
       waveAngle += waveSpeed;
 
       //Gyro rotation
+      rollValue += (targetRoll - rollValue) * easeOutCirc(easeCoeff);
+      pitchValue += (targetPitch - pitchValue) * easeOutCirc(easeCoeff);
       logoModel.rotation.y = rollValue;
       logoModel.rotation.x = pitchValue;
     }
