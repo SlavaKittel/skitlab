@@ -74,7 +74,7 @@ function renderSLogoCanvas(container) {
   let pitchValue = 0;
   let targetRoll = 0;
   let targetPitch = 0;
-  const easeCoeff = 0.001;
+  const smoothFactor = 0.1;
   function handleOrientation(event) {
     const roll = event.gamma;
     const pitch = event.beta;
@@ -83,11 +83,8 @@ function renderSLogoCanvas(container) {
     console.log(pitch);
 
     if (logoModel) {
-      console.log("logoModel", logoModel);
-      rollValue = roll * 0.01;
-      pitchValue = pitch * 0.01;
-      // rollValue = roll * 0.01 * easeOutCirc(easeCoeff);
-      // pitchValue = pitch * 0.01 * easeOutCirc(easeCoeff);
+      targetRoll = roll * 0.01;
+      targetPitch = pitch * 0.01;
     }
   }
   if (window.DeviceOrientationEvent && window.DeviceMotionEvent) {
@@ -115,8 +112,8 @@ function renderSLogoCanvas(container) {
       waveAngle += waveSpeed;
 
       //Gyro rotation
-      rollValue += (targetRoll - rollValue) * easeOutCirc(easeCoeff);
-      pitchValue += (targetPitch - pitchValue) * easeOutCirc(easeCoeff);
+      rollValue += (targetRoll - rollValue) * smoothFactor;
+      pitchValue += (targetPitch - pitchValue) * smoothFactor;
       logoModel.rotation.y = rollValue;
       logoModel.rotation.x = pitchValue;
     }
