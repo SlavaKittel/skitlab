@@ -4,9 +4,9 @@ import { scrollYForEach } from "../utils/helped";
 let newLightArray = [];
 export function getLights(scene) {
   const lights = [
-    { color: 0xffffff, intensivity: 0.5 },
-    { color: 0x18a10e, intensivity: 2 },
-    { color: 0x1d4299, intensivity: 4 },
+    { color: 0xffffff, intensivity: 1 },
+    { color: 0xffffff, intensivity: 1 },
+    { color: 0xffffff, intensivity: 1 },
   ];
   lights.forEach((light) => {
     const pointLight = new THREE.PointLight(

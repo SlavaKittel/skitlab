@@ -1,48 +1,28 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-import vertexShader from "./../shaders/vertexSLogo.glsl?raw";
-import fragmentShader from "./../shaders/fragmentSLogo.glsl?raw";
-
 // <<<< S-3D LOGO >>>>
 const loader = new GLTFLoader();
 let logoModelArray = [];
 let rotationSpeeds = [];
 const logoModelGroup = new THREE.Group();
 
-const customMaterial = new THREE.ShaderMaterial({
-  vertexShader,
-  fragmentShader,
-  uniforms: {
-    lightDirection1: { value: new THREE.Vector3(0, 0, 1).normalize() },
-    lightIntensity1: { value: 8.0 },
-    lightColor1: { value: new THREE.Color(0x797979) },
-    lightDirection2: { value: new THREE.Vector3(0, 1, 0).normalize() },
-    lightIntensity2: { value: 5.0 },
-    lightColor2: { value: new THREE.Color(0x797979) },
-    ambientColor: { value: new THREE.Color(0x797979) },
-    ambientIntensity: { value: 0.2 },
-    metalness: { value: 1.0 },
-    roughness: { value: 0.4 },
-  },
-});
-
-loader.load("/glb-models/main-logo3.glb", ({ scene: model }) => {
-  const logoModel = model;
-  // TODO delete scale
-  // logoModel.scale.set(1, 1, 1);
+let sLogoGltf = null;
+loader.load("/glb-models/main-logo8.glb", (data) => {
+  sLogoGltf = data;
+  let logoModel = sLogoGltf.scene;
 
   logoModel.traverse((child) => {
     if (child.isMesh) {
-      if (child.material) {
-        child.material = customMaterial;
-      }
+      child.material.metalness = 0.3;
+      child.material.roughness = 0.5;
+      child.material.needsUpdate = true;
     }
   });
 
-  let count = 5;
+  let count = 10;
   for (let i = 0; i < count; i += 1) {
-    const angle = Math.random() * Math.PI * 2;
+    const angle = Math.PI * 2 * (i / count) + 0.9;
     const radius = 8;
 
     const logoModelClone = logoModel.clone();
@@ -53,6 +33,7 @@ loader.load("/glb-models/main-logo3.glb", ({ scene: model }) => {
     );
     logoModelClone.position.x = radius * Math.cos(angle);
     logoModelClone.position.z = radius * Math.sin(angle);
+    logoModelClone.lookAt(new THREE.Vector3(0, logoModelClone.position.y, 0));
 
     // Add random rotation speed
     const randomSpeed = Math.random() * 0.01 + 0.01;
@@ -66,6 +47,7 @@ loader.load("/glb-models/main-logo3.glb", ({ scene: model }) => {
 });
 
 // <<<< CYLINDER BACKGROUND >>>>
+
 // Texture Cylinbder Loader
 function nameBoundaryTexture(name) {
   const loader = new THREE.TextureLoader();
@@ -137,8 +119,6 @@ export function updateBackground(yScrollPosition, pointerCoords, deltaTime) {
   logoModelGroup.position.y = -pointerCoords.y * 0.2;
 
   logoModelArray.forEach((logoModel, index) => {
-    logoModel.rotation.y += rotationSpeeds[index] * deltaTime * 10;
     logoModel.rotation.z += rotationSpeeds[index] * deltaTime * 10;
-    logoModel.rotation.x += rotationSpeeds[index] * deltaTime * 10;
   });
 }

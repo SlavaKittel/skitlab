@@ -11,14 +11,24 @@ section.about-us-page {
     top: 0px;
   }
 
-  // TODO delete
-  .test {
+  .slogo-canvas {
     position: absolute;
-    top: 310px;
-    width: 100%;
+    top: 0;
+    left: 0;
     overflow: hidden;
-    background: rgb(203, 19, 19);
-    font-size: 210px;
+    overscroll-behavior: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: auto;
+    canvas {
+      position: fixed;
+      overflow: hidden;
+      display: block;
+    }
   }
 
   .blocks {
