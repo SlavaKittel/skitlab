@@ -82,8 +82,10 @@ function renderSLogoCanvas(container) {
 
     if (logoModel) {
       console.log("logoModel", logoModel);
-      rollValue = roll * 0.01 * easeOutCirc(easeCoeff);
-      pitchValue = pitch * 0.01 * easeOutCirc(easeCoeff);
+      rollValue = roll * 0.01;
+      pitchValue = pitch * 0.01;
+      // rollValue = roll * 0.01 * easeOutCirc(easeCoeff);
+      // pitchValue = pitch * 0.01 * easeOutCirc(easeCoeff);
     }
   }
   if (window.DeviceOrientationEvent && window.DeviceMotionEvent) {
