@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { easeOutCirc } from "./utils/helped";
 
 // Canvas
 const container = document.getElementById("slogoCanvas");
@@ -71,6 +72,7 @@ function renderSLogoCanvas(container) {
   // TODO check
   let rollValue = 0;
   let pitchValue = 0;
+  const easeCoeff = 0.001;
   function handleOrientation(event) {
     const roll = event.gamma;
     const pitch = event.beta;
@@ -80,8 +82,8 @@ function renderSLogoCanvas(container) {
 
     if (logoModel) {
       console.log("logoModel", logoModel);
-      rollValue = roll * 0.1;
-      pitchValue = pitch * 0.1;
+      rollValue = roll * 0.01 * easeOutCirc(easeCoeff);
+      pitchValue = pitch * 0.01 * easeOutCirc(easeCoeff);
     }
   }
   if (window.DeviceOrientationEvent && window.DeviceMotionEvent) {
