@@ -15,9 +15,6 @@ export function getLights(scene) {
       400
     );
     newLightArray.push(pointLight);
-    // TODO for test
-    // const lightHelper = new THREE.PointLightHelper(pointLight, 0.5);
-    // scene.add(lightHelper);
     scene.add(pointLight);
   });
 }

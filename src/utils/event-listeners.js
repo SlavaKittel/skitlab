@@ -82,23 +82,13 @@ portfolioBtnSpecial.addEventListener("click", () => {
 // Event Bus About Us and Burger Menu Toggle
 eventBus.addEventListener("aboutUsToggle", (event) => {
   if (event.detail) {
-    aboutUsPage.style.display = "block";
     aboutUsBtn.classList.add("active");
-    document.body.appendChild(aboutUsPage);
-    requestAnimationFrame(() => {
-      aboutUsPage.classList.add("active"); // Trigger the animation!! (best solution)
-      calculateAndSetAngle(welcomeBlock, "--welcomeAngle");
-      calculateAndSetAngle(descriptionBlock, "--descriptionAngle");
-    });
+    aboutUsPage.classList.add("active");
+    calculateAndSetAngle(descriptionBlock, "--descriptionAngle");
+    calculateAndSetAngle(welcomeBlock, "--welcomeAngle");
   } else {
     aboutUsPage.classList.remove("active");
     aboutUsBtn.classList.remove("active");
-    setTimeout(() => {
-      if (aboutUsPage.parentNode && !aboutUsPage.classList.contains("active")) {
-        aboutUsPage.style.display = "none";
-        aboutUsPage.parentNode.removeChild(aboutUsPage);
-      }
-    }, 300);
   }
 });
 burgerMenuContent.parentNode.removeChild(burgerMenuContent);

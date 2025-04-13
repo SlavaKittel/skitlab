@@ -1,20 +1,16 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { easeOutCirc } from "./../utils/helped";
 
-// Canvas
-const container = document.getElementById("slogoCanvas");
-if (!container) {
-  console.error("Canvas container not found!");
-} else {
-  renderSLogoCanvas(container);
-}
-
-function renderSLogoCanvas(container) {
+export default function renderSLogoCanvas(glb) {
   // Variables
   const startPositionZ = 2;
-  const width = container.clientWidth || window.innerWidth;
-  const height = container.clientHeight || window.innerHeight;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  let waveAngle = 0;
+  const waveSpeed = 0.01;
+  const waveAmplitudeX = 0.03;
+  const waveAmplitudeY = 0.02;
+  const tiltAmplitudeX = 0.02;
+  const tiltAmplitudeY = 0.01;
 
   // Scene and Camera
   const scene = new THREE.Scene();
@@ -22,9 +18,9 @@ function renderSLogoCanvas(container) {
   camera.position.z = startPositionZ;
 
   // Lights
-  const directionalLight = new THREE.PointLight(0xffffff, 15);
-  directionalLight.position.set(2.0, 0.9, 2);
-  scene.add(directionalLight);
+  const pointLight = new THREE.PointLight(0xffffff, 4, 400);
+  pointLight.position.set(2.9, 1.7, 0);
+  scene.add(pointLight);
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
   scene.add(ambientLight);
@@ -35,41 +31,29 @@ function renderSLogoCanvas(container) {
     powerPreference: "high-performance",
   });
   renderer.setSize(width, height);
+  const container = document.getElementById("slogoCanvas");
   container.appendChild(renderer.domElement);
 
   // Resize
   window.addEventListener("resize", () => {
-    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  // GLTF Model Loader
-  let logoModel;
-  const loader = new GLTFLoader();
-  loader.load(
-    "/glb-models/main-logo8.glb",
-    (gltf) => {
-      logoModel = gltf.scene;
-
-      logoModel.traverse((child) => {
-        if (child.isMesh) {
-          child.material.metalness = 0.6;
-          child.material.roughness = 0.2;
-          child.material.needsUpdate = true;
-        }
-      });
-
-      scene.add(logoModel);
-    },
-    undefined,
-    (error) => {
-      console.error("Error loading GLB model:", error);
+  // GLB Model
+  const logoModel = glb.scene;
+  logoModel.traverse((child) => {
+    if (child.isMesh) {
+      child.material.metalness = 0.3;
+      child.material.roughness = 0.5;
+      child.material.needsUpdate = true;
     }
-  );
+  });
+  scene.add(logoModel);
 
   // Gyro rotation
-  // TODO check
+  // TODO check, think about iOS
   let rollValue = 0;
   let pitchValue = 0;
   let targetRoll = 0;
@@ -78,9 +62,9 @@ function renderSLogoCanvas(container) {
   function handleOrientation(event) {
     const roll = event.gamma;
     const pitch = event.beta;
-    console.log(event);
-    console.log(roll);
-    console.log(pitch);
+    // console.log(event);
+    // console.log(roll);
+    // console.log(pitch);
 
     if (logoModel) {
       targetRoll = roll * 0.01;
@@ -91,15 +75,8 @@ function renderSLogoCanvas(container) {
     window.addEventListener("deviceorientation", handleOrientation);
   }
 
-  // Animation
-  let waveAngle = 0;
-  const waveSpeed = 0.01;
-  const waveAmplitudeX = 0.03;
-  const waveAmplitudeY = 0.02;
-  const tiltAmplitudeX = 0.02;
-  const tiltAmplitudeY = 0.01;
-
   function update() {
+    // Gyro Smooth Animation
     if (logoModel) {
       const offsetY = Math.sin(waveAngle) * waveAmplitudeY;
       const offsetX = Math.sin(waveAngle * 0.5) * waveAmplitudeX;

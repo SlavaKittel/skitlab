@@ -18,6 +18,7 @@
       href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist+Mono:wght@100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Teko:wght@300..700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="/styles/loader-screen.scss" />
     <link rel="stylesheet" href="/styles/app.scss" />
     <link rel="stylesheet" href="/styles/main-header.scss" />
     <link rel="stylesheet" href="/styles/mobile-footer.scss" />
@@ -26,6 +27,42 @@
     <title>skitstudio</title>
   </head>
   <body>
+    <section class="loader-screen" id="wrapperLoaderLogo">
+      <div class="loader-logo" id="loaderLogo">
+        <div class="loader-fill">
+          <svg
+            width="151"
+            height="77"
+            viewBox="0 -15 181 107"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              id="progressPath"
+              stroke-width="25"
+              d="M150.02 38.6937C150.02 28.962 146.154 19.6288 139.273 12.7475C132.391 5.86611 123.058 2.00021 113.327 2.00021C103.591 2.00021 94.0045 5.86864 87.1257 12.7475C80.2443 19.6288 76.3784 28.9618 76.3784 38.6935C76.3784 46.1485 74.1763 53.4362 70.0345 59.6348C65.8926 65.8335 60.0057 70.6648 53.1181 73.5177C46.2306 76.3706 38.6517 77.1171 31.3399 75.6627C24.028 74.2083 17.3117 70.6183 12.0402 65.3468C6.76865 60.0752 3.1787 53.3589 1.72429 46.0471C0.269876 38.7353 1.01633 31.1564 3.86926 24.2688C6.72219 17.3812 11.5535 11.4943 17.7521 7.35249C23.9508 3.21069 31.2384 1 38.6935 1"
+              stroke="black"
+            />
+          </svg>
+        </div>
+        <div class="loader-border">
+          <svg
+            width="151"
+            height="77"
+            viewBox="12 -4 181 107"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M134.652 1.45075C144.253 3.35952 153.073 8.07244 159.997 14.9936C164.595 19.5902 168.242 25.0476 170.73 31.0541C173.155 36.9065 174.433 43.1686 174.497 49.5H150.495C150.366 42.918 147.695 36.633 143.031 31.9688C138.249 27.1866 131.763 24.5 125 24.5C118.237 24.5 111.751 27.1866 106.969 31.9688C102.187 36.751 99.5 43.237 99.5 50C99.5 59.7902 96.5969 69.3605 91.1578 77.5007C85.7186 85.641 77.9878 91.9855 68.9428 95.732C59.8979 99.4786 49.9451 100.459 40.3431 98.5489C30.741 96.6389 21.9209 91.9245 14.9982 85.0018C8.07554 78.0791 3.36112 69.259 1.45115 59.657C-0.458817 50.0549 0.521448 40.1021 4.26799 31.0572C8.01452 22.0122 14.3591 14.2814 22.4993 8.84225C30.5009 3.49576 39.8843 0.599619 49.5 0.502524V24.5049C44.6313 24.6004 39.8877 26.0882 35.833 28.7975C31.6395 31.5995 28.3711 35.5821 26.4411 40.2416C24.5111 44.9011 24.0061 50.0283 24.99 54.9748C25.9739 59.9213 28.4026 64.465 31.9688 68.0312C35.535 71.5975 40.0787 74.0261 45.0252 75.01C49.9717 75.9939 55.0989 75.489 59.7584 73.5589C64.418 71.6289 68.4005 68.3605 71.2025 64.167C74.0045 59.9736 75.5 55.0434 75.5 50C75.5002 40.2105 78.403 30.6409 83.8415 22.5011C89.28 14.3613 97.01 8.01684 106.054 4.26994C115.098 0.523048 125.05 -0.458033 134.652 1.45075Z"
+              stroke="black"
+              stroke-width="1"
+            />
+          </svg>
+        </div>
+      </div>
+    </section>
+
     <section class="main-header">
       <div class="social-btns">
         <div
@@ -189,8 +226,115 @@
       <div id="app" class="blur" />
     </section>
 
-    <script type="module" src="./Canvas"></script>
-    <script type="module" src="./components/SLogo"></script>
+    <script type="module">
+      import axios from "axios";
+      import renderCanvas from "./Canvas.js";
+      import renderSLogoCanvas from "./components/SLogoCanvas.js";
+      import * as THREE from "three";
+      import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+      // Video and GLB URLs
+      const videoUrls = [
+        "/video/skit1.mp4",
+        "/video/skit2.mp4",
+        "/video/skit3.mp4",
+      ];
+      const glbUrl = "/glb-models/s-logo.glb";
+
+      // Loader progress animation
+      const loaderLogo = document.getElementById("loaderLogo");
+      const wrapperLoaderLogo = document.getElementById("wrapperLoaderLogo");
+      const porgressPath = document.getElementById("progressPath");
+      const totalFiles = videoUrls.length + 1; // +1 for the GLB file
+      const perFileProgress = new Array(totalFiles).fill(0);
+      const pathLength = progressPath.getTotalLength();
+      progressPath.style.strokeDashoffset = pathLength;
+      const getTrackProgress = (index, loaded, total) => {
+        perFileProgress[index] = loaded / total;
+        const totalProgress =
+          perFileProgress.reduce((a, b) => a + b, 0) / totalFiles;
+        const percent = totalProgress * 100;
+
+        // loader animation
+        const offset = pathLength * (percent / 100);
+        if (pathLength)
+          document.querySelector(".loader-fill").style.opacity = "1";
+        progressPath.style.transition = "stroke-dashoffset 1.2s ease";
+        progressPath.style.strokeDasharray = pathLength;
+        progressPath.style.strokeDashoffset =
+          pathLength + (pathLength * percent) / 100;
+      };
+
+      // Load video and GLB files
+      const loadVideo = (url, index) => {
+        return axios
+          .get(url, {
+            responseType: "blob",
+            onDownloadProgress: (event) =>
+              getTrackProgress(index, event.loaded, event.total),
+          })
+          .then((res) => {
+            const blobUrl = URL.createObjectURL(res.data);
+            const video = document.createElement("video");
+            video.src = blobUrl;
+            video.loop = true;
+            video.muted = true;
+            video.playsInline = true;
+            video.autoplay = true;
+
+            return new Promise((resolve) => {
+              video.onloadeddata = () => {
+                video.play();
+                resolve(video);
+              };
+            });
+          });
+      };
+      const loadGLB = (url, index) => {
+        return axios
+          .get(url, {
+            responseType: "arraybuffer",
+            onDownloadProgress: (event) =>
+              getTrackProgress(index, event.loaded, event.total),
+          })
+          .then((res) => {
+            return new Promise((resolve) => {
+              const loader = new GLTFLoader();
+              loader.parse(
+                res.data,
+                "",
+                (glb) => {
+                  resolve(glb);
+                },
+                (error) => reject(error)
+              );
+            });
+          });
+      };
+
+      const init = async () => {
+        const videoPromises = videoUrls.map((url, index) =>
+          loadVideo(url, index)
+        );
+        const glbPromises = loadGLB(glbUrl, 3);
+
+        const [videos, glb] = await Promise.all([
+          Promise.all(videoPromises),
+          glbPromises,
+        ]);
+
+        setTimeout(() => {
+          loaderLogo.classList.toggle("towards-you");
+          wrapperLoaderLogo.classList.toggle("towards-you");
+        }, 1000);
+        setTimeout(() => {
+          wrapperLoaderLogo.style.display = "none";
+        }, 2000);
+        renderCanvas(videos, glb);
+        renderSLogoCanvas(glb);
+      };
+      init();
+    </script>
     <script type="module" src="./utils/event-listeners"></script>
     <script type="module" src="./utils/css-updater"></script>
   </body>

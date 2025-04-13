@@ -1,11 +1,13 @@
 import {
   bright,
+  brightOpacity30,
   grayBright,
   gray,
   red,
   redHover,
   redPressed,
   dark,
+  darkOpacity30,
   background,
   breakpoints,
 } from "./mixin.js";
@@ -14,12 +16,14 @@ import { calculateAndSetAngle } from "./helped.js";
 
 const themeColors = {
   bright,
+  brightOpacity30,
   grayBright,
   gray,
   red,
   redHover,
   redPressed,
   dark,
+  darkOpacity30,
   background,
 };
 Object.entries(themeColors).forEach(([key, value]) => {

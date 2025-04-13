@@ -1,53 +1,11 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 // <<<< S-3D LOGO >>>>
-const loader = new GLTFLoader();
+const logoModelGroup = new THREE.Group();
 let logoModelArray = [];
 let rotationSpeeds = [];
-const logoModelGroup = new THREE.Group();
-
-let sLogoGltf = null;
-loader.load("/glb-models/main-logo8.glb", (data) => {
-  sLogoGltf = data;
-  let logoModel = sLogoGltf.scene;
-
-  logoModel.traverse((child) => {
-    if (child.isMesh) {
-      child.material.metalness = 0.3;
-      child.material.roughness = 0.5;
-      child.material.needsUpdate = true;
-    }
-  });
-
-  let count = 10;
-  for (let i = 0; i < count; i += 1) {
-    const angle = Math.PI * 2 * (i / count) + 0.9;
-    const radius = 8;
-
-    const logoModelClone = logoModel.clone();
-    logoModelClone.position.set(
-      (0.5 - Math.random()) * 1,
-      0.5 - Math.random() * 3 + 1,
-      (0.5 - Math.random()) * 1
-    );
-    logoModelClone.position.x = radius * Math.cos(angle);
-    logoModelClone.position.z = radius * Math.sin(angle);
-    logoModelClone.lookAt(new THREE.Vector3(0, logoModelClone.position.y, 0));
-
-    // Add random rotation speed
-    const randomSpeed = Math.random() * 0.01 + 0.01;
-    const direction = Math.random() > 0.5 ? 1 : -1;
-    rotationSpeeds.push(randomSpeed * direction);
-
-    logoModelArray.push(logoModelClone);
-    logoModelGroup.add(logoModelClone);
-  }
-  logoModelGroup.position.z = 6;
-});
 
 // <<<< CYLINDER BACKGROUND >>>>
-
 // Texture Cylinbder Loader
 function nameBoundaryTexture(name) {
   const loader = new THREE.TextureLoader();
@@ -99,11 +57,47 @@ const meshCylinder = new THREE.Mesh(geometry, material);
 meshCylinder.rotation.order = "XZY";
 meshCylinder.position.z = 27;
 
-export function getBackground(scene) {
+export function getBackground(scene_, glb_) {
+  // <<<< S-3D LOGO >>>>
+  let logoModel = glb_.scene;
+
+  logoModel.traverse((child) => {
+    if (child.isMesh) {
+      child.material.metalness = 0.3;
+      child.material.roughness = 0.5;
+      child.material.needsUpdate = true;
+    }
+  });
+
+  let count = 10;
+  for (let i = 0; i < count; i += 1) {
+    const angle = Math.PI * 2 * (i / count) + 0.9;
+    const radius = 8;
+
+    const logoModelClone = logoModel.clone();
+    logoModelClone.position.set(
+      (0.5 - Math.random()) * 1,
+      0.5 - Math.random() * 3 + 1,
+      (0.5 - Math.random()) * 1
+    );
+    logoModelClone.position.x = radius * Math.cos(angle);
+    logoModelClone.position.z = radius * Math.sin(angle);
+    logoModelClone.lookAt(new THREE.Vector3(0, logoModelClone.position.y, 0));
+
+    // Add random rotation speed
+    const randomSpeed = Math.random() * 0.01 + 0.01;
+    const direction = Math.random() > 0.5 ? 1 : -1;
+    rotationSpeeds.push(randomSpeed * direction);
+
+    logoModelArray.push(logoModelClone);
+    logoModelGroup.add(logoModelClone);
+  }
+  logoModelGroup.position.z = 6;
+
   // Cylinder background
-  scene.add(meshCylinder);
+  scene_.add(meshCylinder);
   // S-3D Logo
-  scene.add(logoModelGroup);
+  scene_.add(logoModelGroup);
 }
 
 export function updateBackground(yScrollPosition, pointerCoords, deltaTime) {

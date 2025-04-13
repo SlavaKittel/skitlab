@@ -1,4 +1,3 @@
-// TODO need to choose a better fuction
 export function isMobile() {
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   const userAgent = navigator.userAgent.toLowerCase();

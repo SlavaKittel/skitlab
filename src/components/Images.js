@@ -9,6 +9,7 @@ import { isMobile } from "../utils/helped";
 let newImagesMesh = [];
 let newPlanesMesh = [];
 let newMousePlanesMesh = [];
+const markers = [];
 let imagesMeshIntersectIndex = null;
 let scene;
 let camera;
@@ -16,45 +17,6 @@ let renderer;
 let mouseBall;
 let indexOfImageArray = [];
 let pointerCoords = new THREE.Vector2();
-
-// Video Texture
-// TODO change component on Videos or something
-const videos = ["/video/skit1.mp4", "/video/skit2.mp4", "/video/skit3.mp4"];
-const videoTextures = videos.map((src) => {
-  const video = document.createElement("video");
-  video.src = src;
-  video.autoplay = true;
-  video.loop = true;
-  video.muted = true;
-  video.playsInline = true;
-  video.play().catch((error) => {
-    console.error(`Error playing video ${src}:`, error);
-  });
-
-  // Create a VideoTexture for this video
-  const videoTexture = new THREE.VideoTexture(video);
-  videoTexture.minFilter = THREE.LinearFilter;
-  videoTexture.magFilter = THREE.LinearFilter;
-  videoTexture.format = THREE.RGBFormat;
-
-  return videoTexture;
-});
-
-// Markers for bell shape effect
-const markerCount = videos.length;
-const markers = [];
-Array.from({ length: markerCount }).forEach((_, index) => {
-  const getColor = () => {
-    if (index === 0) return "red";
-    if (index === 1) return "green";
-    if (index === 2) return "violet";
-  };
-  const marker = new THREE.Mesh(
-    new THREE.SphereGeometry(0.03, 16, 8),
-    new THREE.MeshBasicMaterial({ color: getColor() })
-  );
-  markers.push(marker);
-});
 
 // Helped Planes
 const planeGroup = new THREE.Group();
@@ -114,26 +76,45 @@ function renderIntersects() {
     });
   }
   if (intersectsImages.length && !state.isOpenMenu && !state.isOpenAboutUs) {
-    mouseBall.style.width = "55px";
-    mouseBall.style.height = "55px";
-    mouseBall.style.background = "unset";
-    mouseBall.querySelector("img").style.opacity = 1;
+    if (!isMobile()) {
+      mouseBall.style.width = "55px";
+      mouseBall.style.height = "55px";
+      mouseBall.style.background = "var(--darkOpacity30)";
+      mouseBall.querySelector("img").style.opacity = 1;
+    }
     imagesMeshIntersectIndex = intersectsImages[0].object.userData.index;
   } else if (!intersectsImages.length) {
-    mouseBall.style.width = "20px";
-    mouseBall.style.height = "20px";
-    mouseBall.style.background = "#ffffff3e";
-    mouseBall.querySelector("img").style.opacity = 0;
+    if (!isMobile()) {
+      mouseBall.style.width = "20px";
+      mouseBall.style.height = "20px";
+      mouseBall.style.background = "var(--brightOpacity30)";
+      mouseBall.querySelector("img").style.opacity = 0;
+    }
     imagesMeshIntersectIndex = null;
   }
   renderer.render(scene, camera);
 }
 
-export function getImages(_scene, _camera, _renderer, _mouseBall) {
+export function getImages(_scene, _camera, _renderer, _mouseBall, _videos) {
   scene = _scene;
   camera = _camera;
   renderer = _renderer;
   mouseBall = _mouseBall;
+
+  // Markers for bell shape effect
+  const markerCount = _videos.length;
+  Array.from({ length: markerCount }).forEach((_, index) => {
+    const getColor = () => {
+      if (index === 0) return "red";
+      if (index === 1) return "green";
+      if (index === 2) return "violet";
+    };
+    const marker = new THREE.Mesh(
+      new THREE.SphereGeometry(0.03, 16, 8),
+      new THREE.MeshBasicMaterial({ color: getColor() })
+    );
+    markers.push(marker);
+  });
 
   // Need for intersect with helped planes for bell shape effect
   scene.add(planeGroup);
@@ -143,7 +124,11 @@ export function getImages(_scene, _camera, _renderer, _mouseBall) {
   scene.add(mousePlaneGroup);
   mousePlaneGroup.visible = false;
 
-  videoTextures.forEach((texture, index) => {
+  _videos.forEach((video, index) => {
+    const texture = new THREE.VideoTexture(video);
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.format = THREE.RGBFormat;
     const planeGeometry = new THREE.PlaneGeometry(1, 1, 80, 80);
     const planeMaterial = new THREE.ShaderMaterial({
       extensions: {

@@ -6,7 +6,6 @@ section.about-us-page {
   position: absolute;
   top: -100vh;
   transition: top 0.3s ease-in-out;
-  display: none;
   &.active {
     top: 0px;
   }
@@ -41,7 +40,9 @@ section.about-us-page {
       min-height: 498px;
       width: 50vw;
       position: relative;
+      background-color: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border-radius: 18px;
       padding: 40px;
       .border-gradient {
