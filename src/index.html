@@ -294,11 +294,12 @@
           });
       };
       const loadGLB = (url, index) => {
+        const total = 1254584; // 1.25MB
         return axios
           .get(url, {
             responseType: "arraybuffer",
             onDownloadProgress: (event) =>
-              getTrackProgress(index, event.loaded, event.total),
+              getTrackProgress(index, event.loaded, total),
           })
           .then((res) => {
             return new Promise((resolve) => {
@@ -334,8 +335,7 @@
           wrapperLoaderLogo.style.display = "none";
         }, 2000);
         renderCanvas(videos, glb);
-        // TODO TEST
-        // renderSLogoCanvas(glb);
+        renderSLogoCanvas(glb);
       };
       init();
     </script>
