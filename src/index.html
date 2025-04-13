@@ -255,9 +255,6 @@
           perFileProgress.reduce((a, b) => a + b, 0) / totalFiles;
         const percent = totalProgress * 100;
 
-        // TODO TEST
-        console.log(index, loaded, total, percent);
-
         // loader animation
         const offset = pathLength * (percent / 100);
         if (pathLength)
@@ -294,12 +291,12 @@
           });
       };
       const loadGLB = (url, index) => {
-        const total = 1254584; // 1.25MB
+        const totalGlb = 1254584; // 1.25MB ( vercel doesn't provide the size of the GLB, need to set it manually )
         return axios
           .get(url, {
             responseType: "arraybuffer",
             onDownloadProgress: (event) =>
-              getTrackProgress(index, event.loaded, total),
+              getTrackProgress(index, event.loaded, totalGlb),
           })
           .then((res) => {
             return new Promise((resolve) => {
