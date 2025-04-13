@@ -255,6 +255,9 @@
           perFileProgress.reduce((a, b) => a + b, 0) / totalFiles;
         const percent = totalProgress * 100;
 
+        // TODO TEST
+        console.log(index, loaded, total, percent);
+
         // loader animation
         const offset = pathLength * (percent / 100);
         if (pathLength)
