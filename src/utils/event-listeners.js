@@ -26,11 +26,9 @@ const portfolioBtnSpecial = document.getElementById("portfolioBtnSpecial");
 const welcomeBlock = document.getElementById("welcomeBlock");
 const descriptionBlock = document.getElementById("descriptionBlock");
 const hoveredBtns = document.querySelectorAll(
-  ".contact-us-btn, .social-btn, .about-us-btn, .logo, .portfolio-btn"
+  ".contact-us-btn, .social-btn, .about-us-btn, .main-logo, .portfolio-btn"
 );
 const contactUsBtns = document.querySelectorAll(".contact-us-btn");
-const linkedin = document.getElementById("linkedin");
-const linktree = document.getElementById("linktree");
 const mainLogo = document.getElementById("mainLogo");
 const textScroll = document.getElementById("textScroll");
 const textClick = document.getElementById("textClick");
@@ -133,38 +131,63 @@ hoveredBtns.forEach((btn) => {
 
 // Hovered buttons
 if (!isMobile()) {
-  function socialBtnHovered(e) {
-    e.addEventListener("mouseenter", () => {
-      e.style.background = "var(--red)";
-      e.style.border = "1px solid var(--red)";
+  function socialBtnHovered(name) {
+    const imgElement = document.getElementById(`${name}`);
+    const srcElement = document.getElementById(`${name}Img`);
+
+    imgElement.addEventListener("mouseenter", () => {
+      imgElement.style.background = "var(--primaryHover)";
+      imgElement.style.border = "1px solid var(--primaryHover)";
+      srcElement.src = `img/${name}.svg`;
     });
-    e.addEventListener("mouseleave", () => {
-      e.style.background = "unset";
-      e.style.border = "1px solid var(--gray)";
+
+    imgElement.addEventListener("mouseleave", () => {
+      imgElement.style.background = "unset";
+      imgElement.style.border = "1px solid var(--primaryPressed)";
+      srcElement.src = `img/${name}-gradient.svg`;
     });
   }
-  socialBtnHovered(linkedin);
-  socialBtnHovered(linktree);
-  socialBtnHovered(portfolioBtn);
+  socialBtnHovered('linkedin');
+  socialBtnHovered('linktree');
+
+  portfolioBtn.addEventListener("mouseenter", () => {
+    portfolioBtn.style.background = "var(--primaryHover)";
+    portfolioBtn.style.border = "1px solid var(--primaryHover)";
+
+    portfolioBtn.firstElementChild.style.background = "var(--background)";
+    portfolioBtn.firstElementChild.style.backgroundClip = "text";
+    portfolioBtn.firstElementChild.style.color = "transparent";
+  
+  });
+  portfolioBtn.addEventListener("mouseleave", () => {
+    portfolioBtn.style.background = "transparent";
+    portfolioBtn.style.border = "1px solid var(--primaryPressed)";
+
+    portfolioBtn.firstElementChild.style.background = "var(--primaryGradient)";
+    portfolioBtn.firstElementChild.style.backgroundClip = "text";
+    portfolioBtn.firstElementChild.style.color = "transparent";
+  });
 
   aboutUsBtn.addEventListener("mouseenter", () => {
-    aboutUsBtn.style.color = "var(--redHover)";
+    aboutUsBtn.style.background = "var(--primaryHover)";
+    aboutUsBtn.style.backgroundClip = "text";
   });
   aboutUsBtn.addEventListener("mouseleave", () => {
-    aboutUsBtn.style.color = "var(--bright)";
+    aboutUsBtn.style.background = "var(--primaryGradient)";
+    aboutUsBtn.style.backgroundClip = "text";
   });
 
   contactUsBtns.forEach((btn) => {
     btn.addEventListener("mouseenter", () => {
-      btn.style.background = "var(--redHover)";
+      btn.style.background = "var(--primaryHover)";
     });
     btn.addEventListener("mouseleave", () => {
-      btn.style.background = "var(--red)";
+      btn.style.background = "var(--primaryGradient)";
     });
   });
 
   mainLogo.addEventListener("mouseenter", () => {
-    mainLogo.src = "img/skit-logo-red.svg";
+    mainLogo.src = "img/skit-logo-gradient.svg";
   });
   mainLogo.addEventListener("mouseleave", () => {
     mainLogo.src = "img/skit-logo.svg";

@@ -19,7 +19,7 @@ section.main-header {
       align-items: center;
       width: 44px;
       border-radius: 6px;
-      border: 1px solid var(--gray);
+      border: 1px solid var(--primaryPressed);
       box-sizing: border-box;
     }
   }
@@ -44,12 +44,18 @@ section.main-header {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      color: var(--bright);
+      background: var(--primaryGradient);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       transition: color 0.3s ease-in-out;
       font-size: 20px;
       padding-top: 4px;
       &.active {
-        color: var(--red) !important;
+        background: var(--primaryPressed) !important;
+        background-clip: text !important;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
     }
     .contact-us-btn {
@@ -59,8 +65,8 @@ section.main-header {
       justify-content: center;
       align-items: center;
       width: 137px;
-      background-color: var(--red);
-      color: var(--bright);
+      background: var(--primaryGradient);
+      color: var(--background);
       font-size: 20px;
       border-radius: 6px;
       padding-top: 4px;
@@ -77,7 +83,6 @@ section.main-header {
 .breakpoint-mobile,
 .breakpoint-mobileSmall {
   section.main-header {
-    height: 40px;
     grid-template-columns: 1fr 1fr;
     .social-btns {
       display: none;
@@ -94,15 +99,11 @@ section.main-header {
       .about-us-btn {
         display: none;
       }
-      .contact-us-btn {
-        width: 101px;
-        font-size: 16px;
-      }
       .burger-menu-btn {
         display: flex;
-        border: 1px solid var(--gray);
+        border: 1px solid white;
         box-sizing: border-box;
-        width: 40px;
+        width: 44px;
         border-radius: 6px;
         .ham {
           cursor: pointer;
@@ -119,7 +120,7 @@ section.main-header {
         .line {
           fill: none;
           transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
-          stroke: var(--bright);
+          stroke: white;
           stroke-width: 4;
         }
         .ham .top {

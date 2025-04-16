@@ -1,11 +1,11 @@
 import {
+  primaryGradient,
+  primaryHover,
+  primaryPressed,
   bright,
   brightOpacity30,
   grayBright,
   gray,
-  red,
-  redHover,
-  redPressed,
   dark,
   darkOpacity30,
   background,
@@ -15,13 +15,13 @@ import {
 import { calculateAndSetAngle } from "./helped.js";
 
 const themeColors = {
+  primaryGradient,
+  primaryHover,
+  primaryPressed,
   bright,
   brightOpacity30,
   grayBright,
   gray,
-  red,
-  redHover,
-  redPressed,
   dark,
   darkOpacity30,
   background,
