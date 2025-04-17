@@ -46,12 +46,16 @@ mousePlanes.forEach((plane, index) => {
 
 // Links
 const urls = ["https://google.com", "https://example.com", "https://mail.com"];
-window.addEventListener("click", () => {
+const handleClick = (event) => {
+  event.preventDefault();
   if (state.isOpenAboutUs) return;
   if (imagesMeshIntersectIndex !== null && urls[imagesMeshIntersectIndex]) {
     window.open(urls[imagesMeshIntersectIndex], "_blank");
   }
-});
+}
+const canvas = document.getElementById("app");
+canvas.addEventListener("click", handleClick);
+canvas.addEventListener("touchend", handleClick);
 
 // Raycaster
 const raycaster = new THREE.Raycaster();
