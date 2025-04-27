@@ -55,7 +55,6 @@ const handleClick = (event) => {
 }
 const canvas = document.getElementById("app");
 canvas.addEventListener("click", handleClick);
-canvas.addEventListener("touchend", handleClick);
 
 // Raycaster
 const raycaster = new THREE.Raycaster();
