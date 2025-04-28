@@ -45,7 +45,7 @@ mousePlanes.forEach((plane, index) => {
 });
 
 // Links
-const urls = ["https://google.com", "https://example.com", "https://mail.com"];
+const urls = ["https://egg.skitstudio.com", "https://heart.skitstudio.com", "https://car.skitstudio.com"];
 const handleClick = (event) => {
   event.preventDefault();
   if (state.isOpenAboutUs) return;
