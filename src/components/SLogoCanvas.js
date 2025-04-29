@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { isMobile } from "./../utils/helped";
 
 export default function renderSLogoCanvas(glb) {
   // Variables
@@ -11,6 +12,18 @@ export default function renderSLogoCanvas(glb) {
   const waveAmplitudeY = 0.02;
   const tiltAmplitudeX = 0.02;
   const tiltAmplitudeY = 0.01;
+  let mouseX = 0;
+  let mouseY = 0;
+  let ballX = 0;
+  let ballY = 0;
+  let speedMouse = 0.03;
+  const pointerCoords = new THREE.Vector2();
+
+  // Pointermove listener
+  window.addEventListener("pointermove", (event) => {
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+  });
 
   // Scene and Camera
   const scene = new THREE.Scene();
@@ -53,7 +66,6 @@ export default function renderSLogoCanvas(glb) {
   scene.add(logoModel);
 
   // Gyro rotation
-  // TODO check, think about iOS
   let rollValue = 0;
   let pitchValue = 0;
   let targetRoll = 0;
@@ -62,9 +74,6 @@ export default function renderSLogoCanvas(glb) {
   function handleOrientation(event) {
     const roll = event.gamma;
     const pitch = event.beta;
-    // console.log(event);
-    // console.log(roll);
-    // console.log(pitch);
 
     if (logoModel) {
       targetRoll = roll * 0.01;
@@ -76,7 +85,6 @@ export default function renderSLogoCanvas(glb) {
   }
 
   function update() {
-    // Gyro Smooth Animation
     if (logoModel) {
       const offsetY = Math.sin(waveAngle) * waveAmplitudeY;
       const offsetX = Math.sin(waveAngle * 0.5) * waveAmplitudeX;
@@ -93,6 +101,19 @@ export default function renderSLogoCanvas(glb) {
       pitchValue += (targetPitch - pitchValue) * smoothFactor;
       logoModel.rotation.y = rollValue;
       logoModel.rotation.x = pitchValue;
+
+      // Mouse movement
+      if (!isMobile()) {
+        // Update Pointer Coords
+        let distX = mouseX - ballX;
+        let distY = mouseY - ballY;
+        ballX += distX * speedMouse;
+        ballY += distY * speedMouse;
+        pointerCoords.x = (ballX / window.innerWidth) * 2 - 1;
+        pointerCoords.y = -(ballY / window.innerHeight) * 2 + 1;
+        logoModel.rotation.x = -pointerCoords.y * 0.3;
+        logoModel.rotation.y = pointerCoords.x * 0.3;
+      }
     }
 
     // Update Canvas
