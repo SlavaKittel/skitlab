@@ -9,7 +9,7 @@ let rotationSpeeds = [];
 // Texture Cylinbder Loader
 function nameBoundaryTexture(name) {
   const loader = new THREE.TextureLoader();
-  return loader.load(`./texture/TilesMosaicPennyround001/${name}.png`);
+  return loader.load(`./texture/TilesMosaicPennyround001/${name}.webp`);
 }
 const colorTexture = nameBoundaryTexture("TilesMosaicPennyround001_BUMP_1K");
 colorTexture.encoding = THREE.LinearEncoding;
