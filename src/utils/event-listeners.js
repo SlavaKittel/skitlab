@@ -89,7 +89,6 @@ eventBus.addEventListener("aboutUsToggle", (event) => {
     aboutUsBtn.classList.remove("active");
   }
 });
-burgerMenuContent.parentNode.removeChild(burgerMenuContent);
 eventBus.addEventListener("menuToggle", (event) => {
   if (event.detail) {
     canvasApp.classList.add("blur-active");
@@ -97,10 +96,7 @@ eventBus.addEventListener("menuToggle", (event) => {
     textScroll.classList.add("blur-active");
     textClick.classList.add("blur-active");
     aboutUsPage.style.pointerEvents = "none";
-    document.body.appendChild(burgerMenuContent);
-    requestAnimationFrame(() => {
-      burgerMenuContent.classList.add("active");
-    });
+    burgerMenuContent.classList.add("active");
   } else {
     canvasApp.classList.remove("blur-active");
     aboutUsPage.classList.remove("blur-active");
@@ -108,14 +104,6 @@ eventBus.addEventListener("menuToggle", (event) => {
     textClick.classList.remove("blur-active");
     aboutUsPage.style.pointerEvents = "all";
     burgerMenuContent.classList.remove("active");
-    setTimeout(() => {
-      if (
-        burgerMenuContent.parentNode &&
-        !burgerMenuContent.classList.contains("active")
-      ) {
-        burgerMenuContent.parentNode.removeChild(burgerMenuContent);
-      }
-    }, 2000);
   }
 });
 
