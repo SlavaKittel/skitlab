@@ -66,14 +66,22 @@
           class="social-btn"
           onclick="window.open('https://www.linkedin.com/company/s-k-it', '_blank')"
         >
-          <img src="img/linkedin-gradient.svg" alt="linked-in" id="linkedinImg" />
+          <img
+            src="img/linkedin-gradient.svg"
+            alt="linked-in"
+            id="linkedinImg"
+          />
         </div>
         <div
           id="linktree"
           class="social-btn"
           onclick="window.open('https://linktr.ee/skitstudio', '_blank')"
         >
-          <img src="img/linktree-gradient.svg" alt="linktree" id="linktreeImg" />
+          <img
+            src="img/linktree-gradient.svg"
+            alt="linktree"
+            id="linktreeImg"
+          />
         </div>
       </div>
       <div class="logo" onclick="window.location.href = '/'">
@@ -163,7 +171,9 @@
             <div class="slogan">where technology meets imagination</div>
           </div>
           <div class="footer">
-            <div class="portfolio-btn" id="portfolioBtn"><span>PORTFOLIO</span></div>
+            <div class="portfolio-btn" id="portfolioBtn">
+              <span>PORTFOLIO</span>
+            </div>
             <div class="skills">
               <div>[WebGL]</div>
               <div>[Three.js]</div>
@@ -334,5 +344,20 @@
     </script>
     <script type="module" src="./utils/event-listeners"></script>
     <script type="module" src="./utils/css-updater"></script>
+    
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-1F85P6N9QX"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-1F85P6N9QX");
+    </script>
   </body>
 </html>
