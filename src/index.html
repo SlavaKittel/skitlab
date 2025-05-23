@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta name="google-site-verification" content="RLNwnM_LvefjtMZQU1g0Cmc4TIqynrhq_lcyTUJH7OQ" />
-    <meta name="description" content="Immersive 3D web experiences for forward-thinking brands.">
+    <meta
+      name="google-site-verification"
+      content="RLNwnM_LvefjtMZQU1g0Cmc4TIqynrhq_lcyTUJH7OQ"
+    />
+    <meta
+      name="description"
+      content="Immersive 3D web experiences for forward-thinking brands."
+    />
     <meta property="og:title" content="SKIT Studio" />
     <meta
       property="og:description"
       content="Immersive 3D web experiences for forward-thinking brands."
     />
     <!-- TODO add image -->
-    <meta property="og:image" content="https://skitstudio.com/img/skit-logo-gradient.svg" />
+    <meta
+      property="og:image"
+      content="https://skitstudio.com/img/skit-logo-gradient.svg"
+    />
     <meta property="og:url" content="https://skitstudio.com/" />
     <meta property="og:type" content="website" />
     <meta charset="UTF-8" />
@@ -33,6 +42,20 @@
     <link rel="stylesheet" href="/styles/about-us.scss" />
     <title>skitstudio</title>
   </head>
+  <!-- Google tag (gtag.js) -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-Z7RLM46PG4"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-Z7RLM46PG4");
+  </script>
   <body>
     <section class="loader-screen" id="wrapperLoaderLogo">
       <div class="loader-logo" id="loaderLogo">
@@ -356,20 +379,6 @@
     <script type="module" src="./utils/event-listeners"></script>
     <script type="module" src="./utils/css-updater"></script>
 
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-1F85P6N9QX"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-1F85P6N9QX");
-    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -378,6 +387,6 @@
         "url": "https://skitstudio.com",
         "logo": "https://skitstudio.com/img/skit-logo-gradient.svg"
       }
-      </script>
+    </script>
   </body>
 </html>
